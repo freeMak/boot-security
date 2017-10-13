@@ -20,7 +20,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers("/css/**", "/fonts/**", "/img/**", "/js/**", "/layui/**", "/files/*")
+		http.authorizeRequests()
+				.antMatchers("/css/**", "/fonts/**", "/img/**", "/js/**", "/layui/**", "/files/*", "/v2/api-docs/**",
+						"/swagger-resources/**", "/swagger-ui.html", "/webjars/**")
 				.permitAll().anyRequest().authenticated().and().formLogin().loginProcessingUrl("/login")
 				.successHandler(authenticationSuccessHandler).failureHandler(authenticationFailureHandler).and()
 				.logout().logoutUrl("/logout").logoutSuccessHandler(logoutSuccessHandler);
