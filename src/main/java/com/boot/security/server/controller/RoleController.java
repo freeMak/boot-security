@@ -3,6 +3,7 @@ package com.boot.security.server.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -66,12 +67,14 @@ public class RoleController {
 		}).build().handle(request);
 	}
 
+	@PreAuthorize("hasAuthority('sys:role:query')")
 	@GetMapping("/{id}")
 	@ApiOperation(value = "根据id获取角色")
 	public Role get(@PathVariable Long id) {
 		return roleDao.getById(id);
 	}
 
+	@PreAuthorize("hasAnyAuthority('sys:user:query','sys:role:query')")
 	@GetMapping("/all")
 	@ApiOperation(value = "所有角色")
 	public List<Role> roles() {

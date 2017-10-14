@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -105,6 +106,7 @@ public class UserController {
 		return new SysUser();
 	}
 
+	@PreAuthorize("hasAuthority('sys:user:query')")
 	@ApiOperation(value = "根据用户id获取用户")
 	@GetMapping("/{id}")
 	public SysUser user(@PathVariable Long id) {

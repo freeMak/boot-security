@@ -13,7 +13,7 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
 
 import com.boot.security.server.service.impl.UserDetailsServiceImpl;
 
-@EnableGlobalMethodSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired

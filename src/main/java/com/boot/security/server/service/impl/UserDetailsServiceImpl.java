@@ -1,6 +1,7 @@
 package com.boot.security.server.service.impl;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import com.boot.security.server.dao.PermissionDao;
+import com.boot.security.server.model.Permission;
 import com.boot.security.server.model.SysUser;
 import com.boot.security.server.model.SysUser.Status;
 import com.boot.security.server.service.UserService;
@@ -24,6 +28,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private PermissionDao permissionDao;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -36,9 +42,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			throw new DisabledException("用户已作废");
 		}
 
-		Set<GrantedAuthority> authorities = new HashSet<>();// TODO
-		GrantedAuthority grantedAuthority = new SimpleGrantedAuthority("rrr");
-		authorities.add(grantedAuthority);
+		Set<GrantedAuthority> authorities = new HashSet<>();
+		List<Permission> permissionList = permissionDao.listByUserId(sysUser.getId());
+		permissionList.parallelStream().filter(p -> !StringUtils.isEmpty(p.getPermission())).forEach(p -> {
+			GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(p.getPermission());
+			authorities.add(grantedAuthority);
+		});
 
 		User user = new User(username, sysUser.getPassword(), authorities);
 		return user;

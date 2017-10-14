@@ -81,7 +81,8 @@ public class SecurityHandlerConfig {
 			@Override
 			public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response,
 					Authentication authentication) throws IOException, ServletException {
-
+				ResponseInfo info = ResponseInfo.builder().code(HttpStatus.OK.value() + "").message("退出成功").build();
+				writeResponse(response, HttpStatus.OK.value(), JSONObject.toJSONString(info));
 			}
 		};
 
