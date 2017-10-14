@@ -32,7 +32,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.permitAll().anyRequest().authenticated().and().formLogin().loginPage("/login.html")
 				.loginProcessingUrl("/login").successHandler(authenticationSuccessHandler)
 				.failureHandler(authenticationFailureHandler).and().logout().logoutUrl("/logout")
-				.logoutSuccessHandler(logoutSuccessHandler).and().csrf().disable();
+				.logoutSuccessHandler(logoutSuccessHandler).and().csrf().disable().headers().frameOptions()
+				.sameOrigin();
 	}
 
 	@Override
