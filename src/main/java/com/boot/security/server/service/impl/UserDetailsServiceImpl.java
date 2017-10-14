@@ -36,7 +36,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			throw new DisabledException("用户已作废");
 		}
 
-		Set<GrantedAuthority> authorities = new HashSet<>();
+		Set<GrantedAuthority> authorities = new HashSet<>();// TODO
 		GrantedAuthority grantedAuthority = new SimpleGrantedAuthority("rrr");
 		authorities.add(grantedAuthority);
 
