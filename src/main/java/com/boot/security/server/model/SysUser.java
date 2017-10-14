@@ -10,7 +10,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class User extends BaseEntity<Long> {
+public class SysUser extends BaseEntity<Long> {
 
 	private static final long serialVersionUID = -6525908145032868837L;
 
