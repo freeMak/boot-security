@@ -1,12 +1,16 @@
 package com.boot.security.server.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+
+import com.boot.security.server.service.UserDetailsServiceImpl;
 
 @EnableGlobalMethodSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -17,6 +21,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private AuthenticationFailureHandler authenticationFailureHandler;
 	@Autowired
 	private LogoutSuccessHandler logoutSuccessHandler;
+	@Autowired
+	private UserDetailsServiceImpl userDetailsServiceImpl;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -25,7 +31,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 						"/webjars/**")
 				.permitAll().anyRequest().authenticated().and().formLogin().loginProcessingUrl("/login")
 				.successHandler(authenticationSuccessHandler).failureHandler(authenticationFailureHandler).and()
-				.logout().logoutUrl("/logout").logoutSuccessHandler(logoutSuccessHandler);
+				.logout().logoutUrl("/logout").logoutSuccessHandler(logoutSuccessHandler).and().csrf().disable();
+	}
+
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth.userDetailsService(userDetailsServiceImpl).passwordEncoder(new PasswordEncoder() {
+
+			@Override
+			public boolean matches(CharSequence rawPassword, String encodedPassword) {
+				return rawPassword.equals(encodedPassword);
+			}
+
+			@Override
+			public String encode(CharSequence rawPassword) {
+				return rawPassword.toString();
+			}
+		});
 	}
 
 }
