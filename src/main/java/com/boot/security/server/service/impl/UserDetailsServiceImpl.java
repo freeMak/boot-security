@@ -1,4 +1,4 @@
-package com.boot.security.server.service;
+package com.boot.security.server.service.impl;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -24,7 +24,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		GrantedAuthority grantedAuthority = new SimpleGrantedAuthority("rrr");
 		authorities.add(grantedAuthority);
 
-		User user = new User(username, "222", authorities);
+		User user = new User(username, username, authorities);
 		return user;
 	}
 

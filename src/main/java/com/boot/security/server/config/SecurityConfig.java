@@ -10,7 +10,7 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
-import com.boot.security.server.service.UserDetailsServiceImpl;
+import com.boot.security.server.service.impl.UserDetailsServiceImpl;
 
 @EnableGlobalMethodSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
