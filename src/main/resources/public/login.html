@@ -38,10 +38,10 @@
 		parent.location.href = '/login.html';
 	}
 
-	var user = loginInfo();
+	/* var user = loginInfo();
 	if (user != "") {
 		location.href = '/';
-	}
+	} */
 
 	function login(obj) {
 		$(obj).attr("disabled", true);
@@ -54,9 +54,10 @@
 		} else {
 			$.ajax({
 				type : 'post',
-				url : '/sys/login',
+				url : '/login',
 				data : $("#login-form").serialize(),
-				success : function() {
+				success : function(data) {
+					console.log(data)
 					location.href = '/';
 				},
 				error : function(xhr, textStatus, errorThrown) {
