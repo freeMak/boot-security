@@ -31,7 +31,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		if (sysUser == null) {
 			throw new AuthenticationCredentialsNotFoundException("用户名不存在");
 		} else if (sysUser.getStatus() == Status.LOCKED) {
-			throw new LockedException("用户被锁定");
+			throw new LockedException("用户被锁定,请联系管理员");
 		} else if (sysUser.getStatus() == Status.DISABLED) {
 			throw new DisabledException("用户已作废");
 		}
