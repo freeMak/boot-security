@@ -1,33 +1,35 @@
 package com.boot.security.server.config;
 
 import java.io.IOException;
-import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
-import com.alibaba.fastjson.JSONObject;
+import com.boot.security.server.dto.LoginUser;
 import com.boot.security.server.dto.ResponseInfo;
+import com.boot.security.server.dto.Token;
+import com.boot.security.server.service.TokenService;
+import com.boot.security.server.utils.ResponseUtil;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Configuration
 public class SecurityHandlerConfig {
 
+	@Autowired
+	private TokenService tokenService;
+
 	/**
-	 * 登陆成功
+	 * 登陆成功，返回Token
 	 * 
 	 * @return
 	 */
@@ -38,13 +40,10 @@ public class SecurityHandlerConfig {
 			@Override
 			public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 					Authentication authentication) throws IOException, ServletException {
-				log.info(request.getRequestURI());
-				User user = (User) authentication.getPrincipal();
-				log.info("{}", user.getAuthorities().stream().map(a -> a.getAuthority()).collect(Collectors.toSet()));
+				LoginUser loginUser = (LoginUser) authentication.getPrincipal();
 
-				ResponseInfo info = ResponseInfo.builder().code(HttpStatus.OK.value() + "").message("登录成功").build();
-
-				writeResponse(response, HttpStatus.OK.value(), JSONObject.toJSONString(info));
+				Token token = tokenService.saveToken(loginUser);
+				ResponseUtil.responseJson(response, HttpStatus.OK.value(), token);
 			}
 		};
 	}
@@ -63,7 +62,7 @@ public class SecurityHandlerConfig {
 					AuthenticationException exception) throws IOException, ServletException {
 				ResponseInfo info = ResponseInfo.builder().code(HttpStatus.UNAUTHORIZED.value() + "")
 						.message(exception.getMessage()).build();
-				writeResponse(response, HttpStatus.UNAUTHORIZED.value(), JSONObject.toJSONString(info));
+				ResponseUtil.responseJson(response, HttpStatus.UNAUTHORIZED.value(), info);
 			}
 		};
 
@@ -82,21 +81,11 @@ public class SecurityHandlerConfig {
 			public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response,
 					Authentication authentication) throws IOException, ServletException {
 				ResponseInfo info = ResponseInfo.builder().code(HttpStatus.OK.value() + "").message("退出成功").build();
-				writeResponse(response, HttpStatus.OK.value(), JSONObject.toJSONString(info));
+
+				ResponseUtil.responseJson(response, HttpStatus.OK.value(), info);
 			}
 		};
 
 	}
 
-	public static void writeResponse(HttpServletResponse response, int status, String json) {
-		try {
-			response.setHeader("Access-Control-Allow-Origin", "*");
-			response.setHeader("Access-Control-Allow-Methods", "*");
-			response.setContentType("application/json;charset=UTF-8");
-			response.setStatus(status);
-			response.getWriter().write(json);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 }
