@@ -1,9 +1,7 @@
 package com.boot.security.server.service.impl;
 
 import java.util.List;
-import java.util.UUID;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -31,8 +29,6 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	public SysUser saveUser(UserDto userDto) {
 		SysUser user = userDto;
-		user.setSalt(DigestUtils
-				.md5Hex(UUID.randomUUID().toString() + System.currentTimeMillis() + UUID.randomUUID().toString()));
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		user.setStatus(Status.VALID);
 		userDao.save(user);
