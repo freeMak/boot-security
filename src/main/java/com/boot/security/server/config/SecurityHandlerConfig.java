@@ -10,9 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.User;
@@ -64,15 +61,8 @@ public class SecurityHandlerConfig {
 			@Override
 			public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
 					AuthenticationException exception) throws IOException, ServletException {
-				ResponseInfo info = ResponseInfo.builder().code(HttpStatus.UNAUTHORIZED.value() + "").build();
-				if (exception instanceof AuthenticationCredentialsNotFoundException) {
-					info.setMessage("用户名存在");
-				} else if (exception instanceof LockedException) {
-					info.setMessage("用户被锁定");
-				} else if (exception instanceof BadCredentialsException) {
-					info.setMessage("密码错误");
-				}
-
+				ResponseInfo info = ResponseInfo.builder().code(HttpStatus.UNAUTHORIZED.value() + "")
+						.message(exception.getMessage()).build();
 				writeResponse(response, HttpStatus.UNAUTHORIZED.value(), JSONObject.toJSONString(info));
 			}
 		};

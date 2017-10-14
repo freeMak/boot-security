@@ -19,9 +19,6 @@ import com.boot.security.server.model.SysUser;
 import com.boot.security.server.model.SysUser.Status;
 import com.boot.security.server.service.UserService;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
@@ -30,7 +27,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		log.info(username);
 		SysUser sysUser = userService.getUser(username);
 		if (sysUser == null) {
 			throw new AuthenticationCredentialsNotFoundException("用户名不存在");
