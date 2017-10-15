@@ -28,7 +28,7 @@ public class LogAdvice {
 	@Autowired
 	private SysLogService logService;
 
-	@Around(value = "@annotation(com.zw.admin.server.annotation.LogAnnotation)")
+	@Around(value = "@annotation(com.boot.security.server.annotation.LogAnnotation)")
 	public Object logSave(ProceedingJoinPoint joinPoint) throws Throwable {
 		SysLogs sysLogs = new SysLogs();
 		MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
