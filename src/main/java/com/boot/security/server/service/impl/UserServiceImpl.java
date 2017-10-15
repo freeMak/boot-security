@@ -4,19 +4,14 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import com.zw.admin.server.constants.UserConstants;
-import com.zw.admin.server.dao.UserDao;
-import com.zw.admin.server.dto.UserDto;
-import com.zw.admin.server.model.User;
-import com.zw.admin.server.model.User.Status;
-import com.zw.admin.server.service.UserService;
-import com.zw.admin.server.utils.UserUtil;
+import com.boot.security.server.dao.UserDao;
+import com.boot.security.server.model.SysUser;
+import com.boot.security.server.service.UserService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,8 +24,8 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional
-	public User saveUser(UserDto userDto) {
-		User user = userDto;
+	public SysUser saveUser(UserDto userDto) {
+		SysUser user = userDto;
 		user.setSalt(DigestUtils
 				.md5Hex(UUID.randomUUID().toString() + System.currentTimeMillis() + UUID.randomUUID().toString()));
 		user.setPassword(passwordEncoder(user.getPassword(), user.getSalt()));
@@ -58,13 +53,13 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User getUser(String username) {
+	public SysUser getUser(String username) {
 		return userDao.getUser(username);
 	}
 
 	@Override
 	public void changePassword(String username, String oldPassword, String newPassword) {
-		User u = userDao.getUser(username);
+		SysUser u = userDao.getUser(username);
 		if (u == null) {
 			throw new IllegalArgumentException("用户不存在");
 		}
@@ -80,7 +75,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional
-	public User updateUser(UserDto userDto) {
+	public SysUser updateUser(UserDto userDto) {
 		userDao.update(userDto);
 		saveUserRoles(userDto.getId(), userDto.getRoleIds());
 		updateUserSession(userDto.getId());
@@ -89,9 +84,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	private void updateUserSession(Long id) {
-		User current = UserUtil.getCurrentUser();
+		SysUser current = UserUtil.getCurrentUser();
 		if (current.getId().equals(id)) {
-			User user = userDao.getById(id);
+			SysUser user = userDao.getById(id);
 			UserUtil.setUserSession(user);
 		}
 	}

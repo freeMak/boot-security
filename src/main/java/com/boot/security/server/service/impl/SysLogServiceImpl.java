@@ -8,11 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import com.zw.admin.server.dao.SysLogsDao;
-import com.zw.admin.server.model.SysLogs;
-import com.zw.admin.server.model.User;
-import com.zw.admin.server.service.SysLogService;
-import com.zw.admin.server.utils.UserUtil;
+import com.boot.security.server.dao.SysLogsDao;
+import com.boot.security.server.model.SysLogs;
+import com.boot.security.server.model.SysUser;
+import com.boot.security.server.service.SysLogService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,7 +25,7 @@ public class SysLogServiceImpl implements SysLogService {
 	@Async
 	@Override
 	public void save(SysLogs sysLogs) {
-		User user = UserUtil.getCurrentUser();
+		SysUser user = UserUtil.getCurrentUser();
 		if (user == null || user.getId() == null) {
 			return;
 		}
@@ -43,7 +42,7 @@ public class SysLogServiceImpl implements SysLogService {
 		sysLogs.setModule(module);
 		sysLogs.setRemark(remark);
 
-		User user = new User();
+		SysUser user = new SysUser();
 		user.setId(userId);
 		sysLogs.setUser(user);
 
