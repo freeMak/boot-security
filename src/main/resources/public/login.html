@@ -40,7 +40,7 @@
 
 	var user = loginInfo();
 	if (user != "") {
-		location.href = '/';
+		location.href = '/index.html';
 	}
 
 	function login(obj) {
@@ -54,10 +54,11 @@
 		} else {
 			$.ajax({
 				type : 'post',
-				url : '/sys/login',
+				url : '/login',
 				data : $("#login-form").serialize(),
-				success : function() {
-					location.href = '/';
+				success : function(data) {
+					localStorage.setItem("token", data.token);
+					location.href = '/index.html';
 				},
 				error : function(xhr, textStatus, errorThrown) {
 					var msg = xhr.responseText;
