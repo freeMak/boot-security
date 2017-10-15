@@ -26,9 +26,18 @@ public class TokenServiceImpl implements TokenService {
 	@Override
 	public Token saveToken(LoginUser loginUser) {
 		String token = UUID.randomUUID().toString();
+		loginUser.setToken(token);
 		redisTemplate.boundValueOps(getKey(token)).set(loginUser, expireSeconds, TimeUnit.SECONDS);
 
 		return Token.builder().token(token).build();
+	}
+
+	/**
+	 * 更新缓存的用户信息
+	 */
+	@Override
+	public void updateLoginUser(LoginUser loginUser) {
+		redisTemplate.boundValueOps(getKey(loginUser.getToken())).set(loginUser, expireSeconds, TimeUnit.SECONDS);
 	}
 
 	@Override

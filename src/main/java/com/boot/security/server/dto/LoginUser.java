@@ -16,13 +16,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
+@Getter
+@Setter
 public class LoginUser extends SysUser implements UserDetails {
 
-	private static final long serialVersionUID = 5847622956044304250L;
+	private static final long serialVersionUID = -1379274258881257107L;
 
-	@Getter
-	@Setter
 	private List<Permission> permissions;
+	private String token;
 
 	@Override
 	@JsonIgnore

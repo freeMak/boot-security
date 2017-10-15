@@ -14,6 +14,8 @@ public interface TokenService {
 
 	Token saveToken(LoginUser loginUser);
 
+	void updateLoginUser(LoginUser loginUser);
+
 	LoginUser getLoginUser(String token);
 
 	boolean deleteToken(String token);
