@@ -15,7 +15,7 @@ import com.zw.admin.server.model.User;
 
 public class UserUtil {
 
-	public static SysUser getLoginUser() {
+	public static LoginUser getLoginUser() {
 		LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 		return loginUser;

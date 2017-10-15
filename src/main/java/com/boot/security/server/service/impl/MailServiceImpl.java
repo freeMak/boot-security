@@ -26,7 +26,7 @@ public class MailServiceImpl implements MailService {
 	@Override
 	@Transactional
 	public void save(Mail mail, List<String> toUser) {
-		mail.setUserId(UserUtil.getCurrentUser().getId());
+		mail.setUserId(UserUtil.getLoginUser().getId());
 		mailDao.save(mail);
 
 		toUser.forEach(u -> {

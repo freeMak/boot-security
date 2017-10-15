@@ -19,4 +19,8 @@ public interface TokenService {
 	LoginUser getLoginUser(String token);
 
 	boolean deleteToken(String token);
+
+	String getTokenByUserId(Long userId);
+
+	void addExpireTime(LoginUser loginUser);
 }

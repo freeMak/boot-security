@@ -1,17 +1,23 @@
 package com.boot.security.server.service.impl;
 
 import java.util.List;
-import java.util.UUID;
 
-import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
+import com.boot.security.server.dao.PermissionDao;
 import com.boot.security.server.dao.UserDao;
+import com.boot.security.server.dto.LoginUser;
 import com.boot.security.server.dto.UserDto;
+import com.boot.security.server.model.Permission;
 import com.boot.security.server.model.SysUser;
+import com.boot.security.server.model.SysUser.Status;
+import com.boot.security.server.service.TokenService;
 import com.boot.security.server.service.UserService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -22,14 +28,18 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserDao userDao;
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
+	@Autowired
+	private PermissionDao permissionDao;
+	@Autowired
+	private TokenService tokenService;
 
 	@Override
 	@Transactional
 	public SysUser saveUser(UserDto userDto) {
 		SysUser user = userDto;
-		user.setSalt(DigestUtils
-				.md5Hex(UUID.randomUUID().toString() + System.currentTimeMillis() + UUID.randomUUID().toString()));
-		user.setPassword(passwordEncoder(user.getPassword(), user.getSalt()));
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		user.setStatus(Status.VALID);
 		userDao.save(user);
 		saveUserRoles(user.getId(), userDto.getRoleIds());
@@ -48,12 +58,6 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public String passwordEncoder(String credentials, String salt) {
-		Object object = new SimpleHash("MD5", credentials, salt, UserConstants.HASH_ITERATIONS);
-		return object.toString();
-	}
-
-	@Override
 	public SysUser getUser(String username) {
 		return userDao.getUser(username);
 	}
@@ -65,11 +69,11 @@ public class UserServiceImpl implements UserService {
 			throw new IllegalArgumentException("用户不存在");
 		}
 
-		if (!u.getPassword().equals(passwordEncoder(oldPassword, u.getSalt()))) {
+		if (passwordEncoder.matches(oldPassword, u.getPassword())) {
 			throw new IllegalArgumentException("密码错误");
 		}
 
-		userDao.changePassword(u.getId(), passwordEncoder(newPassword, u.getSalt()));
+		userDao.changePassword(u.getId(), passwordEncoder.encode(newPassword));
 
 		log.debug("修改{}的密码", username);
 	}
@@ -79,16 +83,23 @@ public class UserServiceImpl implements UserService {
 	public SysUser updateUser(UserDto userDto) {
 		userDao.update(userDto);
 		saveUserRoles(userDto.getId(), userDto.getRoleIds());
-		updateUserSession(userDto.getId());
+		updateUserCache(userDto.getId());
 
 		return userDto;
 	}
 
-	private void updateUserSession(Long id) {
-		SysUser current = UserUtil.getCurrentUser();
-		if (current.getId().equals(id)) {
-			SysUser user = userDao.getById(id);
-			UserUtil.setUserSession(user);
+	private void updateUserCache(Long id) {
+		SysUser sysUser = userDao.getById(id);
+		String token = tokenService.getTokenByUserId(id);
+		if (!StringUtils.isEmpty(token)) {
+			LoginUser loginUser = new LoginUser();
+			loginUser.setToken(token);
+			BeanUtils.copyProperties(sysUser, loginUser);
+
+			List<Permission> permissions = permissionDao.listByUserId(sysUser.getId());
+			loginUser.setPermissions(permissions);
+
+			tokenService.updateLoginUser(loginUser);
 		}
 	}
 }

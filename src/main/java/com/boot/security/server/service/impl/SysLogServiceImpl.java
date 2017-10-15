@@ -12,6 +12,7 @@ import com.boot.security.server.dao.SysLogsDao;
 import com.boot.security.server.model.SysLogs;
 import com.boot.security.server.model.SysUser;
 import com.boot.security.server.service.SysLogService;
+import com.boot.security.server.utils.UserUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,7 +26,7 @@ public class SysLogServiceImpl implements SysLogService {
 	@Async
 	@Override
 	public void save(SysLogs sysLogs) {
-		SysUser user = UserUtil.getCurrentUser();
+		SysUser user = UserUtil.getLoginUser();
 		if (user == null || user.getId() == null) {
 			return;
 		}
