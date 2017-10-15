@@ -22,9 +22,10 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.boot.security.server.annotation.LogAnnotation;
 import com.boot.security.server.dao.PermissionDao;
+import com.boot.security.server.dto.LoginUser;
 import com.boot.security.server.model.Permission;
-import com.boot.security.server.model.SysUser;
 import com.boot.security.server.service.PermissionService;
+import com.boot.security.server.utils.UserUtil;
 import com.google.common.collect.Lists;
 
 import io.swagger.annotations.Api;
@@ -49,12 +50,8 @@ public class PermissionController {
 	@ApiOperation(value = "当前登录用户拥有的权限")
 	@GetMapping("/current")
 	public List<Permission> permissionsCurrent() {
-		List<Permission> list = UserUtil.getCurrentPermissions();
-		if (list == null) {
-			SysUser user = UserUtil.getCurrentUser();
-			list = permissionDao.listByUserId(user.getId());
-			UserUtil.setPermissionSession(list);
-		}
+		LoginUser loginUser = UserUtil.getLoginUser();
+		List<Permission> list = loginUser.getPermissions();
 		final List<Permission> permissions = list.stream().filter(l -> l.getType().equals(1))
 				.collect(Collectors.toList());
 
@@ -182,7 +179,7 @@ public class PermissionController {
 	@GetMapping("/owns")
 	@ApiOperation(value = "校验当前用户的权限")
 	public Set<String> ownsPermission() {
-		List<Permission> permissions = UserUtil.getCurrentPermissions();
+		List<Permission> permissions = UserUtil.getLoginUser().getPermissions();
 		if (CollectionUtils.isEmpty(permissions)) {
 			return Collections.emptySet();
 		}
