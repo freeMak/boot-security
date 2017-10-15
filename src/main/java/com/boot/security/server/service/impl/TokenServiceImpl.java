@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.boot.security.server.dto.LoginUser;
 import com.boot.security.server.dto.Token;
@@ -28,6 +29,11 @@ public class TokenServiceImpl implements TokenService {
 
 	@Override
 	public Token saveToken(LoginUser loginUser) {
+		String oldToken = idTokenRedisTemplate.opsForValue().get(loginUser.getId());
+		if (!StringUtils.isEmpty(oldToken)) {
+			deleteToken(oldToken);
+		}
+
 		String token = UUID.randomUUID().toString();
 		loginUser.setToken(token);
 		updateLoginUser(loginUser);

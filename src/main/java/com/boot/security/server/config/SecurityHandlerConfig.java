@@ -15,7 +15,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
-import org.springframework.util.StringUtils;
 
 import com.boot.security.server.dto.LoginUser;
 import com.boot.security.server.dto.ResponseInfo;
@@ -42,15 +41,8 @@ public class SecurityHandlerConfig {
 			public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 					Authentication authentication) throws IOException, ServletException {
 				LoginUser loginUser = (LoginUser) authentication.getPrincipal();
-				Token token = null;
-				String _token = tokenService.getTokenByUserId(loginUser.getId());
-				if (!StringUtils.isEmpty(_token)) {
-					token = Token.builder().token(_token).build();
-					tokenService.addExpireTime(loginUser);
-				} else {
-					token = tokenService.saveToken(loginUser);
-				}
 
+				Token token = tokenService.saveToken(loginUser);
 				ResponseUtil.responseJson(response, HttpStatus.OK.value(), token);
 			}
 		};
