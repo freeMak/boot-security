@@ -22,5 +22,4 @@ public interface TokenService {
 
 	String getTokenByUserId(Long userId);
 
-	void addExpireTime(LoginUser loginUser);
 }

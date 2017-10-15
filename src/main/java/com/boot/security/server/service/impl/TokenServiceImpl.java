@@ -84,14 +84,4 @@ public class TokenServiceImpl implements TokenService {
 		return idTokenRedisTemplate.opsForValue().get(getUserIdKey(userId));
 	}
 
-	/**
-	 * 重置token过期时间
-	 */
-	@Async
-	@Override
-	public void addExpireTime(LoginUser loginUser) {
-		redisTemplate.expire(getTokenKey(loginUser.getToken()), expireSeconds, TimeUnit.SECONDS);
-		idTokenRedisTemplate.expire(getUserIdKey(loginUser.getId()), expireSeconds, TimeUnit.SECONDS);
-	}
-
 }
