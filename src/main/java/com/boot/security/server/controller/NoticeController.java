@@ -18,10 +18,14 @@ import com.boot.security.server.dao.NoticeDao;
 import com.boot.security.server.dto.NoticeReadVO;
 import com.boot.security.server.dto.NoticeVO;
 import com.boot.security.server.model.Notice;
+import com.boot.security.server.model.SysUser;
 import com.boot.security.server.model.Notice.Status;
 import com.boot.security.server.page.table.PageTableHandler;
+import com.boot.security.server.page.table.PageTableHandler.CountHandler;
+import com.boot.security.server.page.table.PageTableHandler.ListHandler;
 import com.boot.security.server.page.table.PageTableRequest;
 import com.boot.security.server.page.table.PageTableResponse;
+import com.boot.security.server.utils.UserUtil;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -61,9 +65,9 @@ public class NoticeController {
 		}
 		vo.setNotice(notice);
 
-		noticeDao.saveReadRecord(notice.getId(), UserUtil.getCurrentUser().getId());
+		noticeDao.saveReadRecord(notice.getId(), UserUtil.getLoginUser().getId());
 
-		List<User> users = noticeDao.listReadUsers(id);
+		List<SysUser> users = noticeDao.listReadUsers(id);
 		vo.setUsers(users);
 
 		return vo;
@@ -113,14 +117,14 @@ public class NoticeController {
 	@ApiOperation(value = "未读公告数")
 	@GetMapping("/count-unread")
 	public Integer countUnread() {
-		User user = UserUtil.getCurrentUser();
+		SysUser user = UserUtil.getLoginUser();
 		return noticeDao.countUnread(user.getId());
 	}
 
 	@GetMapping("/published")
 	@ApiOperation(value = "公告列表")
 	public PageTableResponse<NoticeReadVO> listNoticeReadVO(PageTableRequest request) {
-		request.getParams().put("userId", UserUtil.getCurrentUser().getId());
+		request.getParams().put("userId", UserUtil.getLoginUser().getId());
 
 		return PageTableHandler.<NoticeReadVO> builder().countHandler(new CountHandler() {
 

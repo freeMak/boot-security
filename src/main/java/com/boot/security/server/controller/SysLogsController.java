@@ -3,6 +3,7 @@ package com.boot.security.server.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,7 +28,7 @@ public class SysLogsController {
 	private SysLogsDao sysLogsDao;
 
 	@GetMapping
-	@RequiresPermissions(value = "sys:log:query")
+	@PreAuthorize("hasAuthority('sys:log:query')")
 	@ApiOperation(value = "日志列表")
 	public PageTableResponse<SysLogs> list(PageTableRequest request) {
 		return PageTableHandler.<SysLogs> builder().countHandler(new CountHandler() {

@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.boot.security.server.annotation.LogAnnotation;
 import com.boot.security.server.dao.PermissionDao;
 import com.boot.security.server.model.Permission;
+import com.boot.security.server.model.SysUser;
 import com.boot.security.server.service.PermissionService;
 import com.google.common.collect.Lists;
 
@@ -49,7 +51,7 @@ public class PermissionController {
 	public List<Permission> permissionsCurrent() {
 		List<Permission> list = UserUtil.getCurrentPermissions();
 		if (list == null) {
-			User user = UserUtil.getCurrentUser();
+			SysUser user = UserUtil.getCurrentUser();
 			list = permissionDao.listByUserId(user.getId());
 			UserUtil.setPermissionSession(list);
 		}

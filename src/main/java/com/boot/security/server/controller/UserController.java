@@ -13,7 +13,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.boot.security.server.annotation.LogAnnotation;
+import com.boot.security.server.dao.UserDao;
+import com.boot.security.server.dto.UserDto;
 import com.boot.security.server.model.SysUser;
+import com.boot.security.server.page.table.PageTableHandler;
+import com.boot.security.server.page.table.PageTableHandler.CountHandler;
+import com.boot.security.server.page.table.PageTableHandler.ListHandler;
+import com.boot.security.server.page.table.PageTableRequest;
+import com.boot.security.server.page.table.PageTableResponse;
+import com.boot.security.server.service.UserService;
+import com.boot.security.server.utils.UserUtil;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -61,7 +71,7 @@ public class UserController {
 	@PutMapping(params = "headImgUrl")
 	@ApiOperation(value = "修改头像")
 	public void updateHeadImgUrl(String headImgUrl) {
-		SysUser user = UserUtil.getCurrentUser();
+		SysUser user = UserUtil.getLoginUser();
 		UserDto userDto = new UserDto();
 		BeanUtils.copyProperties(user, userDto);
 		userDto.setHeadImgUrl(headImgUrl);
@@ -101,7 +111,7 @@ public class UserController {
 	@ApiOperation(value = "当前登录用户")
 	@GetMapping("/current")
 	public SysUser currentUser() {
-		return UserUtil.getCurrentUser();
+		return UserUtil.getLoginUser();
 	}
 
 	@ApiOperation(value = "根据用户id获取用户")
