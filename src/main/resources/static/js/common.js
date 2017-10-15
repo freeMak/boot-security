@@ -38,17 +38,10 @@ function loginInfo(){
 	var user = "";
     $.ajax({
         type : 'get',
-        url : '/sys/login',
+        url : '/users/current?token='+localStorage.getItem("token"),
         async: false,
         success : function(data){
-            if(data != null && data != ""){
-                user = data;
-            }
-        },
-        error: function(xhr,textStatus,errorThrown){
-            var msg = xhr.responseText;
-            var response = JSON.parse(msg);
-            $("#info").html(response.message);
+           user = data;
         }
     });
     

@@ -33,7 +33,7 @@
 		limit #{offset}, #{limit}
 	</select>
 
-	<select id="listReadUsers" resultType="User">
+	<select id="listReadUsers" resultType="SysUser">
 		select u.* from
 		t_notice_read r inner join sys_user u
 		on u.id = r.userId

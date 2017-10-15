@@ -29,7 +29,7 @@ public class TokenServiceImpl implements TokenService {
 
 	@Override
 	public Token saveToken(LoginUser loginUser) {
-		String oldToken = idTokenRedisTemplate.opsForValue().get(loginUser.getId());
+		String oldToken = getTokenByUserId(loginUser.getId());
 		if (!StringUtils.isEmpty(oldToken)) {
 			deleteToken(oldToken);
 		}
