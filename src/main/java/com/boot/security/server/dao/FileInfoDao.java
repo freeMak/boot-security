@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
-import com.zw.admin.server.model.FileInfo;
+import com.boot.security.server.model.FileInfo;
 
 @Mapper
 public interface FileInfoDao {

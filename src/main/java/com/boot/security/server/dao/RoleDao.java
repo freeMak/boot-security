@@ -11,7 +11,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
-import com.zw.admin.server.model.Role;
+import com.boot.security.server.model.Role;
 
 @Mapper
 public interface RoleDao {

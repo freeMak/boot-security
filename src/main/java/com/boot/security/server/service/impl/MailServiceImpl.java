@@ -6,11 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.zw.admin.server.dao.MailDao;
-import com.zw.admin.server.model.Mail;
-import com.zw.admin.server.service.MailService;
-import com.zw.admin.server.service.SendMailSevice;
-import com.zw.admin.server.utils.UserUtil;
+import com.boot.security.server.dao.MailDao;
+import com.boot.security.server.model.Mail;
+import com.boot.security.server.service.MailService;
+import com.boot.security.server.service.SendMailSevice;
+import com.boot.security.server.utils.UserUtil;
 
 import lombok.extern.slf4j.Slf4j;
 

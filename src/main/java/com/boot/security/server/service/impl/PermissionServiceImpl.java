@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.zw.admin.server.dao.PermissionDao;
-import com.zw.admin.server.model.Permission;
-import com.zw.admin.server.service.PermissionService;
+import com.boot.security.server.dao.PermissionDao;
+import com.boot.security.server.model.Permission;
+import com.boot.security.server.service.PermissionService;
 
 import lombok.extern.slf4j.Slf4j;
 

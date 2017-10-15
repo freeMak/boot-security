@@ -13,12 +13,12 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import com.boot.security.server.dto.BeanField;
+import com.boot.security.server.dto.GenerateInput;
+import com.boot.security.server.service.GenerateService;
+import com.boot.security.server.utils.StrUtil;
+import com.boot.security.server.utils.TemplateUtil;
 import com.google.common.collect.Maps;
-import com.zw.admin.server.dto.BeanField;
-import com.zw.admin.server.dto.GenerateInput;
-import com.zw.admin.server.service.GenerateService;
-import com.zw.admin.server.utils.StrUtil;
-import com.zw.admin.server.utils.TemplateUtil;
 
 @Service
 public class GenerateServiceImpl implements GenerateService {

@@ -11,7 +11,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-import com.zw.admin.server.service.SendMailSevice;
+import com.boot.security.server.service.SendMailSevice;
 
 @Service
 public class SendMailSeviceImpl implements SendMailSevice {

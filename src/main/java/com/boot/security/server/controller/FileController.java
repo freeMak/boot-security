@@ -3,8 +3,8 @@ package com.boot.security.server.controller;
 import java.io.IOException;
 import java.util.List;
 
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,17 +13,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.zw.admin.server.annotation.LogAnnotation;
-import com.zw.admin.server.dao.FileInfoDao;
-import com.zw.admin.server.dto.LayuiFile;
-import com.zw.admin.server.dto.LayuiFile.LayuiFileData;
-import com.zw.admin.server.model.FileInfo;
-import com.zw.admin.server.page.table.PageTableRequest;
-import com.zw.admin.server.page.table.PageTableHandler;
-import com.zw.admin.server.page.table.PageTableResponse;
-import com.zw.admin.server.page.table.PageTableHandler.CountHandler;
-import com.zw.admin.server.page.table.PageTableHandler.ListHandler;
-import com.zw.admin.server.service.FileService;
+import com.boot.security.server.annotation.LogAnnotation;
+import com.boot.security.server.dao.FileInfoDao;
+import com.boot.security.server.dto.LayuiFile;
+import com.boot.security.server.dto.LayuiFile.LayuiFileData;
+import com.boot.security.server.model.FileInfo;
+import com.boot.security.server.page.table.PageTableHandler;
+import com.boot.security.server.page.table.PageTableHandler.CountHandler;
+import com.boot.security.server.page.table.PageTableHandler.ListHandler;
+import com.boot.security.server.page.table.PageTableRequest;
+import com.boot.security.server.page.table.PageTableResponse;
+import com.boot.security.server.service.FileService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -71,7 +71,7 @@ public class FileController {
 
 	@GetMapping
 	@ApiOperation(value = "文件查询")
-	@RequiresPermissions("sys:file:query")
+	@PreAuthorize("hasAuthority('sys:file:query')")
 	public PageTableResponse<FileInfo> listFiles(PageTableRequest request) {
 		return PageTableHandler.<FileInfo> builder().countHandler(new CountHandler() {
 
@@ -92,7 +92,7 @@ public class FileController {
 	@LogAnnotation
 	@DeleteMapping("/{id}")
 	@ApiOperation(value = "文件删除")
-	@RequiresPermissions("sys:file:del")
+	@PreAuthorize("hasAuthority('sys:file:del')")
 	public void delete(@PathVariable String id) {
 		fileService.delete(id);
 	}

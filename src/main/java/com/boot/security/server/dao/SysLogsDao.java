@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import com.zw.admin.server.model.SysLogs;
+import com.boot.security.server.model.SysLogs;
 
 @Mapper
 public interface SysLogsDao {

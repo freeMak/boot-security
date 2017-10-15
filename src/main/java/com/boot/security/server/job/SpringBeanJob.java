@@ -7,6 +7,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import com.boot.security.server.config.JobConfig;
+import com.boot.security.server.service.JobService;
 
 public class SpringBeanJob extends QuartzJobBean {
 

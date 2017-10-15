@@ -11,9 +11,9 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
-import com.zw.admin.server.dto.NoticeReadVO;
-import com.zw.admin.server.model.Notice;
-import com.zw.admin.server.model.User;
+import com.boot.security.server.dto.NoticeReadVO;
+import com.boot.security.server.model.Notice;
+import com.boot.security.server.model.SysUser;
 
 @Mapper
 public interface NoticeDao {
@@ -39,7 +39,7 @@ public interface NoticeDao {
 	@Insert("insert ignore into t_notice_read(noticeId, userId, createTime) values(#{noticeId}, #{userId}, now())")
 	int saveReadRecord(@Param("noticeId") Long noticeId, @Param("userId") Long userId);
 
-	List<User> listReadUsers(Long noticeId);
+	List<SysUser> listReadUsers(Long noticeId);
 
 	@Select("select count(1) from t_notice t left join t_notice_read r on r.noticeId = t.id and r.userId = #{userId} where t.status = 1 and r.userId is null")
 	int countUnread(Long userId);

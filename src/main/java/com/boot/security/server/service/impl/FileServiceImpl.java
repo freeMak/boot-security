@@ -7,10 +7,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.zw.admin.server.dao.FileInfoDao;
-import com.zw.admin.server.model.FileInfo;
-import com.zw.admin.server.service.FileService;
-import com.zw.admin.server.utils.FileUtil;
+import com.boot.security.server.dao.FileInfoDao;
+import com.boot.security.server.model.FileInfo;
+import com.boot.security.server.service.FileService;
+import com.boot.security.server.utils.FileUtil;
 
 import lombok.extern.slf4j.Slf4j;
 

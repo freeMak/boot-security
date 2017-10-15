@@ -7,10 +7,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import com.zw.admin.server.dao.RoleDao;
-import com.zw.admin.server.dto.RoleDto;
-import com.zw.admin.server.model.Role;
-import com.zw.admin.server.service.RoleService;
+import com.boot.security.server.dao.RoleDao;
+import com.boot.security.server.dto.RoleDto;
+import com.boot.security.server.model.Role;
+import com.boot.security.server.service.RoleService;
 
 import lombok.extern.slf4j.Slf4j;
 

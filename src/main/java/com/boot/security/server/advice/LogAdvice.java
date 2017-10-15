@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import com.boot.security.server.annotation.LogAnnotation;
+import com.boot.security.server.model.SysLogs;
+import com.boot.security.server.service.SysLogService;
 
 import io.swagger.annotations.ApiOperation;
 

@@ -9,8 +9,8 @@ import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
-import com.zw.admin.server.model.Mail;
-import com.zw.admin.server.model.MailTo;
+import com.boot.security.server.model.Mail;
+import com.boot.security.server.model.MailTo;
 
 @Mapper
 public interface MailDao {

@@ -20,10 +20,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
-import com.zw.admin.server.dao.JobDao;
-import com.zw.admin.server.job.SpringBeanJob;
-import com.zw.admin.server.model.JobModel;
-import com.zw.admin.server.service.JobService;
+import com.boot.security.server.dao.JobDao;
+import com.boot.security.server.job.SpringBeanJob;
+import com.boot.security.server.model.JobModel;
+import com.boot.security.server.service.JobService;
 
 import lombok.extern.slf4j.Slf4j;
 

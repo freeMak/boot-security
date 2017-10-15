@@ -29,19 +29,6 @@ public class ExceptionHandlerAdvice {
 		return ResponseInfo.builder().code(HttpStatus.BAD_REQUEST.value() + "").message(exception.getMessage()).build();
 	}
 
-	@ExceptionHandler({ UnknownAccountException.class, IncorrectCredentialsException.class })
-	@ResponseStatus(HttpStatus.UNAUTHORIZED)
-	public ResponseInfo loginException(Exception exception) {
-		return ResponseInfo.builder().code(HttpStatus.UNAUTHORIZED.value() + "").message(exception.getMessage())
-				.build();
-	}
-
-	@ExceptionHandler({ UnauthorizedException.class })
-	@ResponseStatus(HttpStatus.FORBIDDEN)
-	public ResponseInfo forbidden(Exception exception) {
-		return ResponseInfo.builder().code(HttpStatus.FORBIDDEN.value() + "").message(exception.getMessage()).build();
-	}
-
 	@ExceptionHandler({ MissingServletRequestParameterException.class, HttpMessageNotReadableException.class,
 			UnsatisfiedServletRequestParameterException.class, MethodArgumentTypeMismatchException.class })
 	@ResponseStatus(HttpStatus.BAD_REQUEST)

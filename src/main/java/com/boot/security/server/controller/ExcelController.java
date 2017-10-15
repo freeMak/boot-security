@@ -8,16 +8,16 @@ import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.zw.admin.server.annotation.LogAnnotation;
-import com.zw.admin.server.utils.ExcelUtil;
+import com.boot.security.server.annotation.LogAnnotation;
+import com.boot.security.server.utils.ExcelUtil;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -59,7 +59,7 @@ public class ExcelController {
 	@LogAnnotation
 	@ApiOperation("根据sql导出excel")
 	@PostMapping
-	@RequiresPermissions("excel:down")
+	@PreAuthorize("hasAuthority('excel:down')")
 	public void downloadExcel(String sql, String fileName, HttpServletResponse response) {
 		sql = getAndCheckSql(sql);
 		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql);
@@ -92,7 +92,7 @@ public class ExcelController {
 	@LogAnnotation
 	@ApiOperation("根据sql在页面显示结果")
 	@PostMapping("/show-datas")
-	@RequiresPermissions("excel:show:datas")
+	@PreAuthorize("hasAuthority('excel:show:datas')")
 	public List<Object[]> showData(String sql) {
 		sql = getAndCheckSql(sql);
 		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql);

@@ -7,12 +7,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.quartz.CronExpression;
 import org.quartz.SchedulerException;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,15 +23,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.zw.admin.server.annotation.LogAnnotation;
-import com.zw.admin.server.dao.JobDao;
-import com.zw.admin.server.model.JobModel;
-import com.zw.admin.server.page.table.PageTableHandler;
-import com.zw.admin.server.page.table.PageTableHandler.CountHandler;
-import com.zw.admin.server.page.table.PageTableHandler.ListHandler;
-import com.zw.admin.server.page.table.PageTableRequest;
-import com.zw.admin.server.page.table.PageTableResponse;
-import com.zw.admin.server.service.JobService;
+import com.boot.security.server.annotation.LogAnnotation;
+import com.boot.security.server.dao.JobDao;
+import com.boot.security.server.model.JobModel;
+import com.boot.security.server.page.table.PageTableHandler;
+import com.boot.security.server.page.table.PageTableHandler.CountHandler;
+import com.boot.security.server.page.table.PageTableHandler.ListHandler;
+import com.boot.security.server.page.table.PageTableRequest;
+import com.boot.security.server.page.table.PageTableResponse;
+import com.boot.security.server.service.JobService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -49,7 +49,7 @@ public class JobController {
 	@LogAnnotation
 	@ApiOperation("添加定时任务")
 	@PostMapping
-	@RequiresPermissions("job:add")
+	@PreAuthorize("hasAuthority('job:add')")
 	public void add(@RequestBody JobModel jobModel) {
 		JobModel model = jobDao.getByName(jobModel.getJobName());
 		if (model != null) {
@@ -63,7 +63,7 @@ public class JobController {
 	@LogAnnotation
 	@ApiOperation("修改定时任务")
 	@PutMapping
-	@RequiresPermissions("job:add")
+	@PreAuthorize("hasAuthority('job:add')")
 	public void update(@RequestBody JobModel jobModel) {
 		jobModel.setStatus(1);
 		jobService.saveJob(jobModel);
@@ -72,21 +72,21 @@ public class JobController {
 	@LogAnnotation
 	@ApiOperation("删除定时任务")
 	@DeleteMapping("/{id}")
-	@RequiresPermissions("job:del")
+	@PreAuthorize("hasAuthority('job:del')")
 	public void delete(@PathVariable Long id) throws SchedulerException {
 		jobService.deleteJob(id);
 	}
 
 	@ApiOperation("根据id获取定时任务")
 	@GetMapping("/{id}")
-	@RequiresPermissions("job:query")
+	@PreAuthorize("hasAuthority('job:query')")
 	public JobModel getById(@PathVariable Long id) {
 		return jobDao.getById(id);
 	}
 
 	@GetMapping
 	@ApiOperation(value = "定时任务列表")
-	@RequiresPermissions("job:query")
+	@PreAuthorize("hasAuthority('job:query')")
 	public PageTableResponse<JobModel> list(PageTableRequest request) {
 		return PageTableHandler.<JobModel> builder().countHandler(new CountHandler() {
 
