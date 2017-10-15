@@ -9,16 +9,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.boot.security.server.dto.LoginUser;
-import com.boot.security.server.dto.ResponseInfo;
 import com.boot.security.server.service.TokenService;
-import com.boot.security.server.utils.ResponseUtil;
 
 /**
  * Token过滤器
@@ -27,7 +23,7 @@ import com.boot.security.server.utils.ResponseUtil;
  *
  *         2017年10月14日
  */
-@Component
+//@Component
 public class TokenFilter extends OncePerRequestFilter {
 
 	private static final String TOKEN_KEY = "token";
@@ -45,14 +41,10 @@ public class TokenFilter extends OncePerRequestFilter {
 				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(loginUser,
 						null, loginUser.getAuthorities());
 				SecurityContextHolder.getContext().setAuthentication(authentication);
-
-				filterChain.doFilter(request, response);
-				return;
 			}
 		}
 
-		ResponseUtil.responseJson(response, HttpStatus.UNAUTHORIZED.value(),
-				ResponseInfo.builder().code(HttpStatus.UNAUTHORIZED.value() + "").message("token不存在").build());
+		filterChain.doFilter(request, response);
 	}
 
 	/**
