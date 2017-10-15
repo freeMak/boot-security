@@ -46,14 +46,14 @@ public class RoleController {
 	@LogAnnotation
 	@PostMapping
 	@ApiOperation(value = "保存角色")
-	@RequiresPermissions("sys:role:add")
+	@PreAuthorize("hasAuthority('sys:role:add')")
 	public void saveRole(@RequestBody RoleDto roleDto) {
 		roleService.saveRole(roleDto);
 	}
 
 	@GetMapping
 	@ApiOperation(value = "角色列表")
-	@RequiresPermissions("sys:role:query")
+	@PreAuthorize("hasAuthority('sys:role:query')")
 	public PageTableResponse<Role> listRoles(PageTableRequest request) {
 		return PageTableHandler.<Role> builder().countHandler(new CountHandler() {
 
@@ -73,7 +73,7 @@ public class RoleController {
 
 	@GetMapping("/{id}")
 	@ApiOperation(value = "根据id获取角色")
-	@RequiresPermissions("sys:role:query")
+	@PreAuthorize("hasAuthority('sys:role:query')")
 	public Role get(@PathVariable Long id) {
 		return roleDao.getById(id);
 	}
@@ -87,7 +87,7 @@ public class RoleController {
 
 	@GetMapping(params = "userId")
 	@ApiOperation(value = "根据用户id获取拥有的角色")
-	@RequiresPermissions(value = { "sys:user:query", "sys:role:query" }, logical = Logical.OR)
+	@PreAuthorize("hasAnyAuthority('sys:user:query','sys:role:query')")
 	public List<Role> roles(Long userId) {
 		return roleDao.listByUserId(userId);
 	}
@@ -95,7 +95,7 @@ public class RoleController {
 	@LogAnnotation
 	@DeleteMapping("/{id}")
 	@ApiOperation(value = "删除角色")
-	@RequiresPermissions(value = { "sys:role:del" })
+	@PreAuthorize("hasAuthority('sys:role:del')")
 	public void delete(@PathVariable Long id) {
 		roleService.deleteRole(id);
 	}

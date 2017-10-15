@@ -5,10 +5,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.shiro.authz.annotation.Logical;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,13 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.boot.security.server.annotation.LogAnnotation;
+import com.boot.security.server.dao.PermissionDao;
+import com.boot.security.server.model.Permission;
+import com.boot.security.server.service.PermissionService;
 import com.google.common.collect.Lists;
-import com.zw.admin.server.annotation.LogAnnotation;
-import com.zw.admin.server.dao.PermissionDao;
-import com.zw.admin.server.model.Permission;
-import com.zw.admin.server.model.User;
-import com.zw.admin.server.service.PermissionService;
-import com.zw.admin.server.utils.UserUtil;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -93,7 +89,7 @@ public class PermissionController {
 
 	@GetMapping
 	@ApiOperation(value = "菜单列表")
-	@RequiresPermissions("sys:menu:query")
+	@PreAuthorize("hasAuthority('sys:menu:query')")
 	public List<Permission> permissionsList() {
 		List<Permission> permissionsAll = permissionDao.listAll();
 
@@ -105,7 +101,7 @@ public class PermissionController {
 
 	@GetMapping("/all")
 	@ApiOperation(value = "所有菜单")
-	@RequiresPermissions("sys:menu:query")
+	@PreAuthorize("hasAuthority('sys:menu:query')")
 	public JSONArray permissionsAll() {
 		List<Permission> permissionsAll = permissionDao.listAll();
 		JSONArray array = new JSONArray();
@@ -116,7 +112,7 @@ public class PermissionController {
 
 	@GetMapping("/parents")
 	@ApiOperation(value = "一级菜单")
-	@RequiresPermissions("sys:menu:query")
+	@PreAuthorize("hasAuthority('sys:menu:query')")
 	public List<Permission> parentMenu() {
 		List<Permission> parents = permissionDao.listParents();
 
@@ -148,7 +144,7 @@ public class PermissionController {
 
 	@GetMapping(params = "roleId")
 	@ApiOperation(value = "根据角色id删除权限")
-	@RequiresPermissions(value = { "sys:menu:query", "sys:role:query" }, logical = Logical.OR)
+	@PreAuthorize("hasAnyAuthority('sys:menu:query','sys:role:query')")
 	public List<Permission> listByRoleId(Long roleId) {
 		return permissionDao.listByRoleId(roleId);
 	}
@@ -156,14 +152,14 @@ public class PermissionController {
 	@LogAnnotation
 	@PostMapping
 	@ApiOperation(value = "保存菜单")
-	@RequiresPermissions("sys:menu:add")
+	@PreAuthorize("hasAuthority('sys:menu:add')")
 	public void save(@RequestBody Permission permission) {
 		permissionDao.save(permission);
 	}
 
 	@GetMapping("/{id}")
 	@ApiOperation(value = "根据菜单id获取菜单")
-	@RequiresPermissions("sys:menu:query")
+	@PreAuthorize("hasAuthority('sys:menu:query')")
 	public Permission get(@PathVariable Long id) {
 		return permissionDao.getById(id);
 	}
@@ -171,7 +167,7 @@ public class PermissionController {
 	@LogAnnotation
 	@PutMapping
 	@ApiOperation(value = "修改菜单")
-	@RequiresPermissions("sys:menu:add")
+	@PreAuthorize("hasAuthority('sys:menu:add')")
 	public void update(@RequestBody Permission permission) {
 		permissionDao.update(permission);
 	}
@@ -196,7 +192,7 @@ public class PermissionController {
 	@LogAnnotation
 	@DeleteMapping("/{id}")
 	@ApiOperation(value = "删除菜单")
-	@RequiresPermissions(value = { "sys:menu:del" })
+	@PreAuthorize("hasAuthority('sys:menu:del')")
 	public void delete(@PathVariable Long id) {
 		permissionService.delete(id);
 	}
