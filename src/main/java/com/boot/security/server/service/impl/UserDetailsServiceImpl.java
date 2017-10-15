@@ -1,8 +1,6 @@
 package com.boot.security.server.service.impl;
 
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +11,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import com.boot.security.server.dao.PermissionDao;
 import com.boot.security.server.dto.LoginUser;
@@ -41,13 +38,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			throw new DisabledException("用户已作废");
 		}
 
-		// 查询权限
-		List<Permission> permissionList = permissionDao.listByUserId(sysUser.getId());
-		Set<String> permissions = permissionList.parallelStream().filter(p -> !StringUtils.isEmpty(p.getPermission()))
-				.map(Permission::getPermission).collect(Collectors.toSet());
-
 		LoginUser loginUser = new LoginUser();
 		BeanUtils.copyProperties(sysUser, loginUser);
+
+		List<Permission> permissions = permissionDao.listByUserId(sysUser.getId());
 		loginUser.setPermissions(permissions);
 
 		return loginUser;
