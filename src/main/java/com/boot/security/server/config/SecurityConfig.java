@@ -2,15 +2,16 @@ package com.boot.security.server.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 import com.boot.security.server.filter.TokenFilter;
@@ -37,19 +38,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.addFilterBefore(tokenFilter, FilterSecurityInterceptor.class);
+		http.csrf().disable();
+
 		// 基于token，所以不需要session
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
 		http.authorizeRequests()
-				.antMatchers("/login.html", "/static/**", "/statics/**", "/v2/api-docs/**", "/swagger-resources/**",
-						"/swagger-ui.html", "/webjars/**")
-				.permitAll().anyRequest().authenticated().and().formLogin().loginPage("/login.html")
-				.loginProcessingUrl("/login").successHandler(authenticationSuccessHandler)
-				.failureHandler(authenticationFailureHandler).and().logout().logoutUrl("/logout")
-				.logoutSuccessHandler(logoutSuccessHandler);
-		http.csrf().disable();
-		http.headers().frameOptions().sameOrigin();
+				.antMatchers(HttpMethod.GET, "/*.html", "/favicon.ico", "/**/*.html", "/**/*.css", "/**/*.js",
+						"/fonts/**", "/layui/**", "/img/**", "/v2/api-docs/**", "/swagger-resources/**", "/webjars/**")
+				.permitAll().anyRequest().authenticated();
+		http.formLogin().loginPage("/login.html").loginProcessingUrl("/login")
+				.successHandler(authenticationSuccessHandler).failureHandler(authenticationFailureHandler);
+		http.logout().logoutUrl("/logout").logoutSuccessHandler(logoutSuccessHandler);
+		// 解决不允许显示在iframe的问题
+		http.headers().frameOptions().disable();
 		http.headers().cacheControl();
+
+		http.addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class);
 	}
 
 	@Override
