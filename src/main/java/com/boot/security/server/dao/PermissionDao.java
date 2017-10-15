@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
-import com.boot.security.server.model.Permission;
+import com.zw.admin.server.model.Permission;
 
 @Mapper
 public interface PermissionDao {

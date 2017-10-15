@@ -2,8 +2,9 @@ package com.boot.security.server.controller;
 
 import java.util.List;
 
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,16 +13,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.boot.security.server.dao.RoleDao;
-import com.boot.security.server.dto.RoleDto;
-import com.boot.security.server.model.Role;
-import com.boot.security.server.page.table.PageTableHandler;
-import com.boot.security.server.page.table.PageTableHandler.CountHandler;
-import com.boot.security.server.page.table.PageTableHandler.ListHandler;
-import com.boot.security.server.page.table.PageTableRequest;
-import com.boot.security.server.page.table.PageTableResponse;
-import com.boot.security.server.service.RoleService;
 import com.google.common.collect.Maps;
+import com.zw.admin.server.annotation.LogAnnotation;
+import com.zw.admin.server.dao.RoleDao;
+import com.zw.admin.server.dto.RoleDto;
+import com.zw.admin.server.model.Role;
+import com.zw.admin.server.page.table.PageTableRequest;
+import com.zw.admin.server.page.table.PageTableHandler;
+import com.zw.admin.server.page.table.PageTableResponse;
+import com.zw.admin.server.page.table.PageTableHandler.CountHandler;
+import com.zw.admin.server.page.table.PageTableHandler.ListHandler;
+import com.zw.admin.server.service.RoleService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -42,14 +44,17 @@ public class RoleController {
 	@Autowired
 	private RoleDao roleDao;
 
+	@LogAnnotation
 	@PostMapping
 	@ApiOperation(value = "保存角色")
+	@RequiresPermissions("sys:role:add")
 	public void saveRole(@RequestBody RoleDto roleDto) {
 		roleService.saveRole(roleDto);
 	}
 
 	@GetMapping
 	@ApiOperation(value = "角色列表")
+	@RequiresPermissions("sys:role:query")
 	public PageTableResponse<Role> listRoles(PageTableRequest request) {
 		return PageTableHandler.<Role> builder().countHandler(new CountHandler() {
 
@@ -67,28 +72,31 @@ public class RoleController {
 		}).build().handle(request);
 	}
 
-	@PreAuthorize("hasAuthority('sys:role:query')")
 	@GetMapping("/{id}")
 	@ApiOperation(value = "根据id获取角色")
+	@RequiresPermissions("sys:role:query")
 	public Role get(@PathVariable Long id) {
 		return roleDao.getById(id);
 	}
 
-	@PreAuthorize("hasAnyAuthority('sys:user:query','sys:role:query')")
 	@GetMapping("/all")
 	@ApiOperation(value = "所有角色")
+	@RequiresPermissions(value = { "sys:user:query", "sys:role:query" }, logical = Logical.OR)
 	public List<Role> roles() {
 		return roleDao.list(Maps.newHashMap(), null, null);
 	}
 
 	@GetMapping(params = "userId")
 	@ApiOperation(value = "根据用户id获取拥有的角色")
+	@RequiresPermissions(value = { "sys:user:query", "sys:role:query" }, logical = Logical.OR)
 	public List<Role> roles(Long userId) {
 		return roleDao.listByUserId(userId);
 	}
 
+	@LogAnnotation
 	@DeleteMapping("/{id}")
 	@ApiOperation(value = "删除角色")
+	@RequiresPermissions(value = { "sys:role:del" })
 	public void delete(@PathVariable Long id) {
 		roleService.deleteRole(id);
 	}

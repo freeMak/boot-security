@@ -1,13 +1,14 @@
 package com.boot.security.server.controller;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,11 +21,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.boot.security.server.dao.PermissionDao;
-import com.boot.security.server.model.Permission;
-import com.boot.security.server.model.SysUser;
-import com.boot.security.server.service.PermissionService;
 import com.google.common.collect.Lists;
+import com.zw.admin.server.annotation.LogAnnotation;
+import com.zw.admin.server.dao.PermissionDao;
+import com.zw.admin.server.model.Permission;
+import com.zw.admin.server.model.User;
+import com.zw.admin.server.service.PermissionService;
+import com.zw.admin.server.utils.UserUtil;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -47,12 +50,12 @@ public class PermissionController {
 
 	@ApiOperation(value = "当前登录用户拥有的权限")
 	@GetMapping("/current")
-	public List<Permission> permissionsCurrent() {// TODO
-		List<Permission> list = null;
+	public List<Permission> permissionsCurrent() {
+		List<Permission> list = UserUtil.getCurrentPermissions();
 		if (list == null) {
-			list = new ArrayList<>();
-			SysUser user = new SysUser();
+			User user = UserUtil.getCurrentUser();
 			list = permissionDao.listByUserId(user.getId());
+			UserUtil.setPermissionSession(list);
 		}
 		final List<Permission> permissions = list.stream().filter(l -> l.getType().equals(1))
 				.collect(Collectors.toList());
@@ -90,6 +93,7 @@ public class PermissionController {
 
 	@GetMapping
 	@ApiOperation(value = "菜单列表")
+	@RequiresPermissions("sys:menu:query")
 	public List<Permission> permissionsList() {
 		List<Permission> permissionsAll = permissionDao.listAll();
 
@@ -101,6 +105,7 @@ public class PermissionController {
 
 	@GetMapping("/all")
 	@ApiOperation(value = "所有菜单")
+	@RequiresPermissions("sys:menu:query")
 	public JSONArray permissionsAll() {
 		List<Permission> permissionsAll = permissionDao.listAll();
 		JSONArray array = new JSONArray();
@@ -111,6 +116,7 @@ public class PermissionController {
 
 	@GetMapping("/parents")
 	@ApiOperation(value = "一级菜单")
+	@RequiresPermissions("sys:menu:query")
 	public List<Permission> parentMenu() {
 		List<Permission> parents = permissionDao.listParents();
 
@@ -142,24 +148,30 @@ public class PermissionController {
 
 	@GetMapping(params = "roleId")
 	@ApiOperation(value = "根据角色id删除权限")
+	@RequiresPermissions(value = { "sys:menu:query", "sys:role:query" }, logical = Logical.OR)
 	public List<Permission> listByRoleId(Long roleId) {
 		return permissionDao.listByRoleId(roleId);
 	}
 
+	@LogAnnotation
 	@PostMapping
 	@ApiOperation(value = "保存菜单")
+	@RequiresPermissions("sys:menu:add")
 	public void save(@RequestBody Permission permission) {
 		permissionDao.save(permission);
 	}
 
 	@GetMapping("/{id}")
 	@ApiOperation(value = "根据菜单id获取菜单")
+	@RequiresPermissions("sys:menu:query")
 	public Permission get(@PathVariable Long id) {
 		return permissionDao.getById(id);
 	}
 
+	@LogAnnotation
 	@PutMapping
 	@ApiOperation(value = "修改菜单")
+	@RequiresPermissions("sys:menu:add")
 	public void update(@RequestBody Permission permission) {
 		permissionDao.update(permission);
 	}
@@ -171,8 +183,8 @@ public class PermissionController {
 	 */
 	@GetMapping("/owns")
 	@ApiOperation(value = "校验当前用户的权限")
-	public Set<String> ownsPermission() {// TODO
-		List<Permission> permissions = new ArrayList<>();
+	public Set<String> ownsPermission() {
+		List<Permission> permissions = UserUtil.getCurrentPermissions();
 		if (CollectionUtils.isEmpty(permissions)) {
 			return Collections.emptySet();
 		}
@@ -181,8 +193,10 @@ public class PermissionController {
 				.map(Permission::getPermission).collect(Collectors.toSet());
 	}
 
+	@LogAnnotation
 	@DeleteMapping("/{id}")
 	@ApiOperation(value = "删除菜单")
+	@RequiresPermissions(value = { "sys:menu:del" })
 	public void delete(@PathVariable Long id) {
 		permissionService.delete(id);
 	}

@@ -1,15 +1,17 @@
 package com.boot.security.server.service;
 
-import com.boot.security.server.dto.UserDto;
-import com.boot.security.server.model.SysUser;
+import com.zw.admin.server.dto.UserDto;
+import com.zw.admin.server.model.User;
 
 public interface UserService {
 
-	SysUser saveUser(UserDto userDto);
+	User saveUser(UserDto userDto);
+	
+	User updateUser(UserDto userDto);
 
-	SysUser updateUser(UserDto userDto);
+	String passwordEncoder(String credentials, String salt);
 
-	SysUser getUser(String username);
+	User getUser(String username);
 
 	void changePassword(String username, String oldPassword, String newPassword);
 
