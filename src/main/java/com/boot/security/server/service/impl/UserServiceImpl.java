@@ -70,8 +70,8 @@ public class UserServiceImpl implements UserService {
 			throw new IllegalArgumentException("用户不存在");
 		}
 
-		if (passwordEncoder.matches(oldPassword, u.getPassword())) {
-			throw new IllegalArgumentException("密码错误");
+		if (!passwordEncoder.matches(oldPassword, u.getPassword())) {
+			throw new IllegalArgumentException("旧密码错误");
 		}
 
 		userDao.changePassword(u.getId(), passwordEncoder.encode(newPassword));
