@@ -11,6 +11,22 @@
 	<div class="admin-main">
 		<blockquote class="layui-elem-quote">
 			<fieldset class="layui-elem-field">
+				<legend>说明：</legend>
+				<div class="layui-field-box">
+					<p>
+						<span class="layui-badge-dot"></span>spring security 全注解式的权限管理，可控制到按钮权限粒度
+					</p>
+					<p>
+						<span class="layui-badge-dot"></span>采用token进行权限交互，禁用session，未登录返回401，权限不足返回403
+					</p>
+					<p>
+						<span class="layui-badge-dot"></span>采用redis存储token及权限信息
+					</p>
+				</div>
+			</fieldset>
+		</blockquote>
+		<blockquote class="layui-elem-quote">
+			<fieldset class="layui-elem-field">
 				<legend>内置功能：</legend>
 				<div class="layui-field-box">
 					<p>
@@ -74,13 +90,7 @@
 					<p>&nbsp;&nbsp;&nbsp; sl4j日志分包：将sql日志、业务日志、异常日志进行了分离，更方便定位问题</p>
 					<p>&nbsp;&nbsp;&nbsp; 日志表：使用aop拦截实现</p>
 					<p>
-						<span class="layui-badge-dot"></span>token管理器：基于redis和ehcache两种方式任你选择
-					</p>
-					<p>
-						<span class="layui-badge-dot"></span>权限控制：基于session和Restful的无状态token两种方式
-					</p>
-					<p>
-						<span class="layui-badge-dot"></span>分布式session共享：使用spring-session实现
+						<span class="layui-badge-dot"></span>权限控制：基于token方式，禁用session
 					</p>
 					<p>
 						<span class="layui-badge-dot"></span>对各种不同异常进行了全局统一处理
@@ -97,18 +107,6 @@
 					<p>
 						<span class="layui-badge-dot"></span>表单数据采用bootstrapValidator校验，简单快捷方便
 					</p>
-			</fieldset>
-		</blockquote>
-		<blockquote class="layui-elem-quote">
-			<fieldset class="layui-elem-field">
-				<legend>说明：</legend>
-				<div class="layui-field-box">
-					<p>单机下不需要session共享</p>
-					<p>集群下，请打开pom里的 groupId：org.springframework.session
-						artifactId：spring-session 和com.zw.admin.server.config.RedisConfig
-						中的@EnableRedisHttpSession</p>
-					<p>将EhCacheTokenManager类上的注解@Primary移到RedisTokenManager上面</p>
-				</div>
 			</fieldset>
 		</blockquote>
 	</div>
