@@ -8,6 +8,7 @@
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 		<form class="form-horizontal" id="form" method="post" action="/excels" onsubmit="return false" enctype="multipart/form-data">
 			<fieldset>
+				<input id="token" name="token" hidden="true">
 				<div class="form-group">
 					<label class="col-md-2 control-label">sql</label>
 					<div class="col-md-10 form-inline">
@@ -86,7 +87,8 @@
 			if(!checkSql()){
 				return;
 			}
-
+			
+			$("#token").val(localStorage.getItem("token"));
 			$("#form").attr("onsubmit", "return true");
 			$("#form").submit();
 			$("#form").attr("onsubmit", "return false");
