@@ -1,0 +1,13 @@
+package {beanPackageName};
+
+{import}
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class {beanName} extends BaseEntity<Long> {
+
+{filelds}
+}
