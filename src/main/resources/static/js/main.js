@@ -112,6 +112,7 @@ function logout(){
 		type : 'get',
 		url : '/logout',
 		success : function(data) {
+			localStorage.removeItem("token");
 			location.href='/login.html';
 		}
 	});
