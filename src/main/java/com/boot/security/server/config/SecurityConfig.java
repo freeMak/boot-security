@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -15,7 +16,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 import com.boot.security.server.filter.TokenFilter;
-import com.boot.security.server.service.impl.UserDetailsServiceImpl;
 
 /**
  * spring security配置
@@ -35,7 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private LogoutSuccessHandler logoutSuccessHandler;
 	@Autowired
-	private UserDetailsServiceImpl userDetailsServiceImpl;
+	private UserDetailsService userDetailsService;
 	@Autowired
 	private TokenFilter tokenFilter;
 
@@ -67,7 +67,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userDetailsServiceImpl).passwordEncoder(bCryptPasswordEncoder());
+		auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
 	}
 
 }
