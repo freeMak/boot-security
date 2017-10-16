@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -83,15 +84,21 @@ public class UserServiceImpl implements UserService {
 	public SysUser updateUser(UserDto userDto) {
 		userDao.update(userDto);
 		saveUserRoles(userDto.getId(), userDto.getRoleIds());
-		updateUserCache(userDto.getId());
+		updateLoginUserCache(userDto.getId());
 
 		return userDto;
 	}
 
-	private void updateUserCache(Long id) {
-		SysUser sysUser = userDao.getById(id);
-		String token = tokenService.getTokenByUserId(id);
+	/**
+	 * 修改登陆用户的缓存
+	 */
+	@Async
+	@Override
+	public void updateLoginUserCache(Long userId) {
+		String token = tokenService.getTokenByUserId(userId);
 		if (!StringUtils.isEmpty(token)) {
+			SysUser sysUser = userDao.getById(userId);
+
 			LoginUser loginUser = new LoginUser();
 			loginUser.setToken(token);
 			BeanUtils.copyProperties(sysUser, loginUser);
@@ -101,5 +108,6 @@ public class UserServiceImpl implements UserService {
 
 			tokenService.updateLoginUser(loginUser);
 		}
+
 	}
 }

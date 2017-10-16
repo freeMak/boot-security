@@ -13,4 +13,5 @@ public interface UserService {
 
 	void changePassword(String username, String oldPassword, String newPassword);
 
+	void updateLoginUserCache(Long userId);
 }
