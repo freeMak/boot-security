@@ -11,6 +11,7 @@ import org.springframework.util.StringUtils;
 
 import com.boot.security.server.dto.LoginUser;
 import com.boot.security.server.dto.Token;
+import com.boot.security.server.service.SysLogService;
 import com.boot.security.server.service.TokenService;
 
 @Service
@@ -25,6 +26,8 @@ public class TokenServiceImpl implements TokenService {
 	private RedisTemplate<String, LoginUser> redisTemplate;
 	@Autowired
 	private RedisTemplate<String, String> idTokenRedisTemplate;
+	@Autowired
+	private SysLogService logService;
 
 	@Override
 	public Token saveToken(LoginUser loginUser) {
@@ -35,6 +38,7 @@ public class TokenServiceImpl implements TokenService {
 
 		loginUser.setToken(token);
 		updateLoginUser(loginUser);
+		logService.save(loginUser.getId(), "登陆", true, null);
 
 		return Token.builder().token(token).build();
 	}
@@ -61,6 +65,7 @@ public class TokenServiceImpl implements TokenService {
 		if (loginUser != null) {
 			redisTemplate.delete(key);
 			redisTemplate.delete(getUserIdKey(loginUser.getId()));
+			logService.save(loginUser.getId(), "退出", true, null);
 
 			return true;
 		}
