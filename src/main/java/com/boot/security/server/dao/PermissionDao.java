@@ -1,6 +1,7 @@
 package com.boot.security.server.dao;
 
 import java.util.List;
+import java.util.Set;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
@@ -36,10 +37,13 @@ public interface PermissionDao {
 
 	@Delete("delete from sys_permission where id = #{id}")
 	int delete(Long id);
-	
+
 	@Delete("delete from sys_permission where parentId = #{id}")
 	int deleteByParentId(Long id);
 
 	@Delete("delete from sys_role_permission where permissionId = #{permissionId}")
 	int deleteRolePermission(Long permissionId);
+
+	@Select("select ru.userId from sys_role_permission rp inner join sys_role_user ru on ru.roleId = rp.roleId where rp.permissionId = #{permissionId}")
+	Set<Long> listUserIds(Long permissionId);
 }

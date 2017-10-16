@@ -2,6 +2,7 @@ package com.boot.security.server.dao;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
@@ -47,4 +48,7 @@ public interface RoleDao {
 
 	@Delete("delete from sys_role_user where roleId = #{roleId}")
 	int deleteRoleUser(Long roleId);
+	
+	@Select("select ru.userId from sys_role r inner join sys_role_user ru on r.id = ru.roleId where ru.roleId = #{roleId}")
+	Set<Long> listUserIds(Long roleId);
 }

@@ -168,7 +168,7 @@ public class PermissionController {
 	@ApiOperation(value = "修改菜单")
 	@PreAuthorize("hasAuthority('sys:menu:add')")
 	public void update(@RequestBody Permission permission) {
-		permissionDao.update(permission);
+		permissionService.update(permission);
 	}
 
 	/**
