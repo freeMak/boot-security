@@ -32,15 +32,30 @@
 
 </body>
 <script src="../js/libs/jquery-2.1.1.min.js"></script>
-<script src="../js/common.js"></script>
 <script type="text/javascript">
 	if (top != self) {
 		parent.location.href = '/login.html';
 	}
 
-	var user = loginInfo();
-	if (user != "") {
-		location.href = '/index.html';
+	
+	var token = localStorage.getItem("token");
+	if (token != null && token.trim().length != 0) {
+		$.ajax({
+			type : 'get',
+			url : '/users/current?token=' + token,
+			success : function(data) {
+				location.href = '/index.html';
+			},
+			error : function(xhr, textStatus, errorThrown) {
+				var msg = xhr.responseText;
+				var response = JSON.parse(msg);
+				var code = response.code;
+				var message = response.message;
+				if (code == 401) {
+					localStorage.removeItem("token");
+				}
+			}
+		});
 	}
 
 	function login(obj) {

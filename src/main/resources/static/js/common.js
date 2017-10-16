@@ -32,18 +32,3 @@ function getUrlParam(key) {
 		}
 	}
 }
-
-// 检查登录状态
-function loginInfo(){
-	var user = "";
-    $.ajax({
-        type : 'get',
-        url : '/users/current?token='+localStorage.getItem("token"),
-        async: false,
-        success : function(data){
-           user = data;
-        }
-    });
-    
-    return user;
-}

@@ -11,7 +11,8 @@ $.ajaxSetup({
 		if (code == 400) {
 			layer.msg(message);
 		} else if (code == 401) {
-			layer.msg('未登录');
+			localStorage.removeItem("token");
+			location.href = '/login.html';
 		} else if (code == 403) {
 			console.log("未授权:" + message);
 			layer.msg('未授权');
