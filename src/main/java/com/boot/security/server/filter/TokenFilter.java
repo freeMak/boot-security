@@ -35,7 +35,6 @@ public class TokenFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		System.out.println(request.getRequestURI());
 		String token = getToken(request);
 		if (StringUtils.isNotBlank(token)) {
 			LoginUser loginUser = tokenService.getLoginUser(token);
