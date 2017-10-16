@@ -118,8 +118,7 @@ public class SecurityHandlerConfig {
 				ResponseInfo info = ResponseInfo.builder().code(HttpStatus.OK.value() + "").message("退出成功").build();
 
 				String token = TokenFilter.getToken(request);
-				boolean flag = tokenService.deleteToken(token);
-				System.out.println(flag);
+				tokenService.deleteToken(token);
 
 				ResponseUtil.responseJson(response, HttpStatus.OK.value(), info);
 			}
