@@ -5,7 +5,6 @@ import java.util.Date;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.boot.security.server.dao.SysLogsDao;
@@ -23,7 +22,6 @@ public class SysLogServiceImpl implements SysLogService {
 	@Autowired
 	private SysLogsDao sysLogsDao;
 
-	@Async
 	@Override
 	public void save(SysLogs sysLogs) {
 		SysUser user = UserUtil.getLoginUser();
@@ -35,7 +33,6 @@ public class SysLogServiceImpl implements SysLogService {
 		sysLogsDao.save(sysLogs);
 	}
 
-	@Async
 	@Override
 	public void save(Long userId, String module, Boolean flag, String remark) {
 		SysLogs sysLogs = new SysLogs();
