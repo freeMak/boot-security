@@ -44,4 +44,7 @@ public interface RoleDao {
 
 	@Delete("delete from sys_role where id = #{id}")
 	int delete(Long id);
+
+	@Delete("delete from sys_role_user where roleId = #{roleId}")
+	int deleteRoleUser(Long roleId);
 }

@@ -59,6 +59,7 @@ public class RoleServiceImpl implements RoleService {
 	@Transactional
 	public void deleteRole(Long id) {
 		roleDao.deleteRolePermission(id);
+		roleDao.deleteRoleUser(id);
 		roleDao.delete(id);
 
 		log.debug("删除角色id:{}", id);
