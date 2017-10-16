@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
@@ -81,6 +82,25 @@ public class SecurityHandlerConfig {
 			}
 		};
 
+	}
+
+	/**
+	 * 未登录，返回401
+	 * 
+	 * @return
+	 */
+	@Bean
+	public AuthenticationEntryPoint authenticationEntryPoint() {
+		return new AuthenticationEntryPoint() {
+
+			@Override
+			public void commence(HttpServletRequest request, HttpServletResponse response,
+					AuthenticationException authException) throws IOException, ServletException {
+				ResponseInfo info = ResponseInfo.builder().code(HttpStatus.UNAUTHORIZED.value() + "").message("请先登录")
+						.build();
+				ResponseUtil.responseJson(response, HttpStatus.UNAUTHORIZED.value(), info);
+			}
+		};
 	}
 
 	/**

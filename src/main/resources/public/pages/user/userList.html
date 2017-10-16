@@ -72,7 +72,12 @@
 <script type="text/javascript" src="../../js/plugin/datatables/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="../../js/plugin/datatables/dataTables.bootstrap.min.js"></script>
 <script type="text/javascript" src="../../js/my/permission.js"></script>
+<script type="text/javascript" src="../../layui/layui.js"></script>
 <script type="text/javascript">
+layui.use([ 'layer' ], function() {
+	var layer = layui.layer;
+});
+
 var pers = checkPermission();
 
 var example;

@@ -2,6 +2,7 @@ package com.boot.security.server.advice;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.UnsatisfiedServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -27,6 +28,12 @@ public class ExceptionHandlerAdvice {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ResponseInfo badRequestException(IllegalArgumentException exception) {
 		return ResponseInfo.builder().code(HttpStatus.BAD_REQUEST.value() + "").message(exception.getMessage()).build();
+	}
+
+	@ExceptionHandler({ AccessDeniedException.class })
+	@ResponseStatus(HttpStatus.FORBIDDEN)
+	public ResponseInfo badRequestException(AccessDeniedException exception) {
+		return ResponseInfo.builder().code(HttpStatus.FORBIDDEN.value() + "").message(exception.getMessage()).build();
 	}
 
 	@ExceptionHandler({ MissingServletRequestParameterException.class, HttpMessageNotReadableException.class,

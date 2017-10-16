@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -35,6 +36,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private LogoutSuccessHandler logoutSuccessHandler;
 	@Autowired
+	private AuthenticationEntryPoint authenticationEntryPoint;
+	@Autowired
 	private UserDetailsService userDetailsService;
 	@Autowired
 	private TokenFilter tokenFilter;
@@ -56,7 +59,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 						"/img/**", "/v2/api-docs/**", "/swagger-resources/**", "/webjars/**", "/pages/**")
 				.permitAll().anyRequest().authenticated();
 		http.formLogin().loginPage("/login.html").loginProcessingUrl("/login")
-				.successHandler(authenticationSuccessHandler).failureHandler(authenticationFailureHandler);
+				.successHandler(authenticationSuccessHandler).failureHandler(authenticationFailureHandler).and()
+				.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint);
 		http.logout().logoutUrl("/logout").logoutSuccessHandler(logoutSuccessHandler);
 		// 解决不允许显示在iframe的问题
 		http.headers().frameOptions().disable();
