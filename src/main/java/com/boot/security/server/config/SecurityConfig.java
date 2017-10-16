@@ -17,6 +17,14 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
 import com.boot.security.server.filter.TokenFilter;
 import com.boot.security.server.service.impl.UserDetailsServiceImpl;
 
+/**
+ * spring security配置
+ * 
+ * @author 小威老师
+ * 
+ *         2017年10月16日
+ *
+ */
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
