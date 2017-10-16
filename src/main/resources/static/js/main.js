@@ -107,6 +107,16 @@ function showUnreadNotice(){
 	});
 }
 
+function logout(){
+	$.ajax({
+		type : 'get',
+		url : '/logout',
+		success : function(data) {
+			location.href='/login.html';
+		}
+	});
+}
+
 var active;
 
 layui.use(['layer', 'element'], function() {

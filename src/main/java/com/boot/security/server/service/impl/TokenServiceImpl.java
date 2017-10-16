@@ -6,7 +6,6 @@ import java.util.concurrent.TimeUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -29,12 +28,11 @@ public class TokenServiceImpl implements TokenService {
 
 	@Override
 	public Token saveToken(LoginUser loginUser) {
-		String oldToken = getTokenByUserId(loginUser.getId());
-		if (!StringUtils.isEmpty(oldToken)) {
-			deleteToken(oldToken);
+		String token = getTokenByUserId(loginUser.getId());
+		if (StringUtils.isEmpty(token)) {
+			token = UUID.randomUUID().toString();
 		}
 
-		String token = UUID.randomUUID().toString();
 		loginUser.setToken(token);
 		updateLoginUser(loginUser);
 
@@ -44,7 +42,6 @@ public class TokenServiceImpl implements TokenService {
 	/**
 	 * 更新缓存的用户信息
 	 */
-	@Async
 	@Override
 	public void updateLoginUser(LoginUser loginUser) {
 		redisTemplate.boundValueOps(getTokenKey(loginUser.getToken())).set(loginUser, expireSeconds, TimeUnit.SECONDS);
@@ -59,8 +56,11 @@ public class TokenServiceImpl implements TokenService {
 
 	@Override
 	public boolean deleteToken(String token) {
-		if (redisTemplate.hasKey(getTokenKey(token))) {
-			redisTemplate.delete(getTokenKey(token));
+		String key = getTokenKey(token);
+		LoginUser loginUser = redisTemplate.opsForValue().get(key);
+		if (loginUser != null) {
+			redisTemplate.delete(key);
+			redisTemplate.delete(getUserIdKey(loginUser.getId()));
 
 			return true;
 		}

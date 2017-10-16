@@ -20,6 +20,7 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
 import com.boot.security.server.dto.LoginUser;
 import com.boot.security.server.dto.ResponseInfo;
 import com.boot.security.server.dto.Token;
+import com.boot.security.server.filter.TokenFilter;
 import com.boot.security.server.service.TokenService;
 import com.boot.security.server.utils.ResponseUtil;
 
@@ -95,6 +96,10 @@ public class SecurityHandlerConfig {
 			public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response,
 					Authentication authentication) throws IOException, ServletException {
 				ResponseInfo info = ResponseInfo.builder().code(HttpStatus.OK.value() + "").message("退出成功").build();
+
+				String token = TokenFilter.getToken(request);
+				boolean flag = tokenService.deleteToken(token);
+				System.out.println(flag);
 
 				ResponseUtil.responseJson(response, HttpStatus.OK.value(), info);
 			}
