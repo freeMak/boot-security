@@ -46,14 +46,14 @@ mybatis:
     mapUnderscoreToCamelCase: true
 files:
   path: ${file-path:d:/files}
-#logging:
-#  config: classpath:logback-admin.xml
-#log:
-#  level:
-#    root: info
-#    my: debug
-#  file: logs/admin-server.log
-#  maxsize: 30MB
+logging:
+  config: classpath:logback-admin.xml
+log:
+  level:
+    root: info
+    my: debug
+  file: logs/admin-server.log
+  maxsize: 30MB
 token:
   expire:
     seconds: 86400
