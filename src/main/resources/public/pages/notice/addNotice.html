@@ -59,7 +59,7 @@
 		  layedit = layui.layedit;
 		  layedit.set({
               uploadImage: {
-                url: '/files/layui?domain=' + domain,
+                url: '/files/layui?domain=' + domain+"&token="+localStorage.getItem("token"),
                 type: 'post'
               }
             });

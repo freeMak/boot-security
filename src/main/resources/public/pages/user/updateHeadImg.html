@@ -29,7 +29,7 @@
 			success : function(data) {
 				var url = data.headImgUrl;
 				if(url!=null && url!=""){
-					var src = domain + "/files" + url;
+					var src = domain + "/statics" + url;
                     var a = "<a target='_blank' href='" + src +"'><img src='" + src + "'></img></a>";
 					$("#headImgDiv").html(a);
 				}
@@ -52,9 +52,12 @@
 		            async : false,
 		            success : function(data) {
 		            	 layer.msg("上传成功");
-		                 var src = domain + "/files" + url;
+		                 var src = domain + "/statics" + url;
 		                 var a = "<a target='_blank' href='" + src +"'><img src='" + src + "'></img></a>";
 		                 $("#headImgDiv").html(a);
+		                 
+		                 var img = parent.$(".admin-header-user img");
+		     			 img.attr("src", src);
 		            }
 		        });
 	    }

@@ -82,6 +82,8 @@ function showLoginInfo(){
 				}
 				
 				url = domain + url;
+			} else {
+				url = domain + "/statics" + url;
 			}
 			var img = $(".admin-header-user img");
 			img.attr("src", url);
