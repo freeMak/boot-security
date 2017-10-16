@@ -2,7 +2,6 @@ package com.boot.security.server.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -55,8 +54,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
 		http.authorizeRequests()
-				.antMatchers(HttpMethod.GET, "/", "/*.html", "/favicon.ico", "/css/**", "/js/**", "/fonts/**",
-						"/layui/**", "/img/**", "/v2/api-docs/**", "/swagger-resources/**", "/webjars/**", "/pages/**")
+				.antMatchers("/", "/*.html", "/favicon.ico", "/css/**", "/js/**", "/fonts/**", "/layui/**", "/img/**",
+						"/v2/api-docs/**", "/swagger-resources/**", "/webjars/**", "/pages/**", "/druid/**")
 				.permitAll().anyRequest().authenticated();
 		http.formLogin().loginPage("/login.html").loginProcessingUrl("/login")
 				.successHandler(authenticationSuccessHandler).failureHandler(authenticationFailureHandler).and()
