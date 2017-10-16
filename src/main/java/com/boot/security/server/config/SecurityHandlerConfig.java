@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -67,8 +68,14 @@ public class SecurityHandlerConfig {
 			@Override
 			public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
 					AuthenticationException exception) throws IOException, ServletException {
-				ResponseInfo info = ResponseInfo.builder().code(HttpStatus.UNAUTHORIZED.value() + "")
-						.message(exception.getMessage()).build();
+				String msg = null;
+				if (exception instanceof BadCredentialsException) {
+					msg = "密码错误";
+				} else {
+					msg = exception.getMessage();
+				}
+				ResponseInfo info = ResponseInfo.builder().code(HttpStatus.UNAUTHORIZED.value() + "").message(msg)
+						.build();
 				ResponseUtil.responseJson(response, HttpStatus.UNAUTHORIZED.value(), info);
 			}
 		};
