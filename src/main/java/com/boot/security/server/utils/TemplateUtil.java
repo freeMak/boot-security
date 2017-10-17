@@ -100,8 +100,6 @@ public class TemplateUtil {
 					.append("() {\n");
 			buffer.append("\t\treturn ").append(name).append(";\n");
 			buffer.append("\t}\n");
-			// 默认值
-			buffer.append(";\n");
 		}
 
 		return buffer.toString();
