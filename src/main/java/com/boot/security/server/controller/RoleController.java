@@ -54,21 +54,21 @@ public class RoleController {
 	@GetMapping
 	@ApiOperation(value = "角色列表")
 	@PreAuthorize("hasAuthority('sys:role:query')")
-	public PageTableResponse<Role> listRoles(PageTableRequest request) {
-		return PageTableHandler.<Role> builder().countHandler(new CountHandler() {
+	public PageTableResponse listRoles(PageTableRequest request) {
+		return new PageTableHandler(new CountHandler() {
 
 			@Override
 			public int count(PageTableRequest request) {
 				return roleDao.count(request.getParams());
 			}
-		}).listHandler(new ListHandler<Role>() {
+		}, new ListHandler() {
 
 			@Override
 			public List<Role> list(PageTableRequest request) {
 				List<Role> list = roleDao.list(request.getParams(), request.getOffset(), request.getLimit());
 				return list;
 			}
-		}).build().handle(request);
+		}).handle(request);
 	}
 
 	@GetMapping("/{id}")

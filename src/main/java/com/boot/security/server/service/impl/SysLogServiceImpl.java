@@ -4,6 +4,8 @@ import java.util.Date;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -14,11 +16,10 @@ import com.boot.security.server.model.SysUser;
 import com.boot.security.server.service.SysLogService;
 import com.boot.security.server.utils.UserUtil;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j(topic = "adminLogger")
 @Service
 public class SysLogServiceImpl implements SysLogService {
+
+	private static final Logger log = LoggerFactory.getLogger("adminLogger");
 
 	@Autowired
 	private SysLogsDao sysLogsDao;

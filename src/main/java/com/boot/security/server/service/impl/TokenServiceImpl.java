@@ -40,7 +40,7 @@ public class TokenServiceImpl implements TokenService {
 		updateLoginUser(loginUser);
 		logService.save(loginUser.getId(), "登陆", true, null);
 
-		return Token.builder().token(token).build();
+		return new Token(token);
 	}
 
 	/**

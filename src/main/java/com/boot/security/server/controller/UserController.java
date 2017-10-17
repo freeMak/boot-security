@@ -2,6 +2,8 @@ package com.boot.security.server.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,7 +29,6 @@ import com.boot.security.server.utils.UserUtil;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * 用户相关接口
@@ -36,10 +37,12 @@ import lombok.extern.slf4j.Slf4j;
  *
  */
 @Api(tags = "用户")
-@Slf4j(topic = "adminLogger")
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
+
+	private static final Logger log = LoggerFactory.getLogger("adminLogger");
 
 	@Autowired
 	private UserService userService;
@@ -91,21 +94,21 @@ public class UserController {
 	@GetMapping
 	@ApiOperation(value = "用户列表")
 	@PreAuthorize("hasAuthority('sys:user:query')")
-	public PageTableResponse<SysUser> listUsers(PageTableRequest request) {
-		return PageTableHandler.<SysUser> builder().countHandler(new CountHandler() {
+	public PageTableResponse listUsers(PageTableRequest request) {
+		return new PageTableHandler(new CountHandler() {
 
 			@Override
 			public int count(PageTableRequest request) {
 				return userDao.count(request.getParams());
 			}
-		}).listHandler(new ListHandler<SysUser>() {
+		}, new ListHandler() {
 
 			@Override
 			public List<SysUser> list(PageTableRequest request) {
 				List<SysUser> list = userDao.list(request.getParams(), request.getOffset(), request.getLimit());
 				return list;
 			}
-		}).build().handle(request);
+		}).handle(request);
 	}
 
 	@ApiOperation(value = "当前登录用户")

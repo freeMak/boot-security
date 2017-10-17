@@ -15,6 +15,8 @@ import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.TriggerBuilder;
 import org.quartz.TriggerKey;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -25,11 +27,10 @@ import com.boot.security.server.job.SpringBeanJob;
 import com.boot.security.server.model.JobModel;
 import com.boot.security.server.service.JobService;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j(topic = "adminLogger")
 @Service
 public class JobServiceImpl implements JobService {
+
+	private static final Logger log = LoggerFactory.getLogger("adminLogger");
 
 	@Autowired
 	private Scheduler scheduler;

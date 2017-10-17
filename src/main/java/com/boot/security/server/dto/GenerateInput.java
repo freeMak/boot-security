@@ -3,11 +3,6 @@ package com.boot.security.server.dto;
 import java.io.Serializable;
 import java.util.List;
 
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter
-@Setter
 public class GenerateInput implements Serializable {
 
 	private static final long serialVersionUID = -2870071259702969061L;
@@ -61,4 +56,100 @@ public class GenerateInput implements Serializable {
 	 * 默认值
 	 */
 	private List<String> beanFieldValue;
+
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
+	}
+
+	public String getTableName() {
+		return tableName;
+	}
+
+	public void setTableName(String tableName) {
+		this.tableName = tableName;
+	}
+
+	public String getBeanPackageName() {
+		return beanPackageName;
+	}
+
+	public void setBeanPackageName(String beanPackageName) {
+		this.beanPackageName = beanPackageName;
+	}
+
+	public String getBeanName() {
+		return beanName;
+	}
+
+	public void setBeanName(String beanName) {
+		this.beanName = beanName;
+	}
+
+	public String getDaoPackageName() {
+		return daoPackageName;
+	}
+
+	public void setDaoPackageName(String daoPackageName) {
+		this.daoPackageName = daoPackageName;
+	}
+
+	public String getDaoName() {
+		return daoName;
+	}
+
+	public void setDaoName(String daoName) {
+		this.daoName = daoName;
+	}
+
+	public String getControllerPkgName() {
+		return controllerPkgName;
+	}
+
+	public void setControllerPkgName(String controllerPkgName) {
+		this.controllerPkgName = controllerPkgName;
+	}
+
+	public String getControllerName() {
+		return controllerName;
+	}
+
+	public void setControllerName(String controllerName) {
+		this.controllerName = controllerName;
+	}
+
+	public List<String> getColumnNames() {
+		return columnNames;
+	}
+
+	public void setColumnNames(List<String> columnNames) {
+		this.columnNames = columnNames;
+	}
+
+	public List<String> getBeanFieldName() {
+		return beanFieldName;
+	}
+
+	public void setBeanFieldName(List<String> beanFieldName) {
+		this.beanFieldName = beanFieldName;
+	}
+
+	public List<String> getBeanFieldType() {
+		return beanFieldType;
+	}
+
+	public void setBeanFieldType(List<String> beanFieldType) {
+		this.beanFieldType = beanFieldType;
+	}
+
+	public List<String> getBeanFieldValue() {
+		return beanFieldValue;
+	}
+
+	public void setBeanFieldValue(List<String> beanFieldValue) {
+		this.beanFieldValue = beanFieldValue;
+	}
 }

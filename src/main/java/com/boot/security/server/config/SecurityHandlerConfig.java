@@ -76,8 +76,7 @@ public class SecurityHandlerConfig {
 				} else {
 					msg = exception.getMessage();
 				}
-				ResponseInfo info = ResponseInfo.builder().code(HttpStatus.UNAUTHORIZED.value() + "").message(msg)
-						.build();
+				ResponseInfo info = new ResponseInfo(HttpStatus.UNAUTHORIZED.value() + "", msg);
 				ResponseUtil.responseJson(response, HttpStatus.UNAUTHORIZED.value(), info);
 			}
 		};
@@ -96,8 +95,7 @@ public class SecurityHandlerConfig {
 			@Override
 			public void commence(HttpServletRequest request, HttpServletResponse response,
 					AuthenticationException authException) throws IOException, ServletException {
-				ResponseInfo info = ResponseInfo.builder().code(HttpStatus.UNAUTHORIZED.value() + "").message("请先登录")
-						.build();
+				ResponseInfo info = new ResponseInfo(HttpStatus.UNAUTHORIZED.value() + "", "请先登录");
 				ResponseUtil.responseJson(response, HttpStatus.UNAUTHORIZED.value(), info);
 			}
 		};
@@ -115,7 +113,7 @@ public class SecurityHandlerConfig {
 			@Override
 			public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response,
 					Authentication authentication) throws IOException, ServletException {
-				ResponseInfo info = ResponseInfo.builder().code(HttpStatus.OK.value() + "").message("退出成功").build();
+				ResponseInfo info = new ResponseInfo(HttpStatus.OK.value() + "", "退出成功");
 
 				String token = TokenFilter.getToken(request);
 				tokenService.deleteToken(token);

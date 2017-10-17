@@ -76,20 +76,20 @@ public class MailController {
 	@GetMapping
 	@ApiOperation(value = "邮件列表")
 	@PreAuthorize("hasAuthority('mail:all:query')")
-	public PageTableResponse<Mail> list(PageTableRequest request) {
-		return PageTableHandler.<Mail> builder().countHandler(new CountHandler() {
+	public PageTableResponse list(PageTableRequest request) {
+		return new PageTableHandler(new CountHandler() {
 
 			@Override
 			public int count(PageTableRequest request) {
 				return mailDao.count(request.getParams());
 			}
-		}).listHandler(new ListHandler<Mail>() {
+		}, new ListHandler() {
 
 			@Override
 			public List<Mail> list(PageTableRequest request) {
 				return mailDao.list(request.getParams(), request.getOffset(), request.getLimit());
 			}
-		}).build().handle(request);
+		}).handle(request);
 	}
 
 }

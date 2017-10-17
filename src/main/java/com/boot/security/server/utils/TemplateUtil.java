@@ -6,13 +6,14 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.boot.security.server.dto.GenerateInput;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j(topic = "adminLogger")
 public class TemplateUtil {
+
+	private static final Logger log = LoggerFactory.getLogger("adminLogger");
 
 	public static String getTemplete(String fileName) {
 		return FileUtil.getText(TemplateUtil.class.getClassLoader().getResourceAsStream("generate/" + fileName));
@@ -40,6 +41,7 @@ public class TemplateUtil {
 		text = text.replace("{import}", imports);
 		String filelds = getFields(beanFieldName, beanFieldType, beanFieldValue);
 		text = text.replace("{filelds}", filelds);
+		text = text.replace("{getset}", getset(beanFieldName, beanFieldType));
 
 		FileUtil.saveTextFile(text, path + File.separator + getPackagePath(beanPackageName) + beanName + ".java");
 		log.debug("生成java model：{}模板", beanName);
@@ -72,6 +74,33 @@ public class TemplateUtil {
 //
 //				buffer.append(value);
 //			}
+			buffer.append(";\n");
+		}
+
+		return buffer.toString();
+	}
+
+	private static String getset(List<String> beanFieldName, List<String> beanFieldType) {
+		StringBuffer buffer = new StringBuffer();
+		int size = beanFieldName.size();
+		for (int i = 0; i < size; i++) {
+			String name = beanFieldName.get(i);
+			if ("id".equals(name) || "createTime".equals(name) || "updateTime".equals(name)) {
+				continue;
+			}
+
+			String type = beanFieldType.get(i);
+			buffer.append("\tpublic ").append(type).append(" get")
+					.append(StringUtils.substring(name, 0, 1).toUpperCase() + name.substring(1, name.length()))
+					.append("() {\n");
+			buffer.append("\t\treturn ").append(name).append(";\n");
+			buffer.append("\t}\n");
+			buffer.append("\tpublic ").append(type).append(" set")
+					.append(StringUtils.substring(name, 0, 1).toUpperCase() + name.substring(1, name.length()))
+					.append("() {\n");
+			buffer.append("\t\treturn ").append(name).append(";\n");
+			buffer.append("\t}\n");
+			// 默认值
 			buffer.append(";\n");
 		}
 

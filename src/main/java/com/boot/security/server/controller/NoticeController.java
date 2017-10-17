@@ -90,20 +90,20 @@ public class NoticeController {
 	@GetMapping
 	@ApiOperation(value = "公告管理列表")
 	@PreAuthorize("hasAuthority('notice:query')")
-	public PageTableResponse<Notice> listNotice(PageTableRequest request) {
-		return PageTableHandler.<Notice> builder().countHandler(new CountHandler() {
+	public PageTableResponse listNotice(PageTableRequest request) {
+		return new PageTableHandler(new CountHandler() {
 
 			@Override
 			public int count(PageTableRequest request) {
 				return noticeDao.count(request.getParams());
 			}
-		}).listHandler(new ListHandler<Notice>() {
+		}, new ListHandler() {
 
 			@Override
 			public List<Notice> list(PageTableRequest request) {
 				return noticeDao.list(request.getParams(), request.getOffset(), request.getLimit());
 			}
-		}).build().handle(request);
+		}).handle(request);
 	}
 
 	@LogAnnotation
@@ -123,21 +123,21 @@ public class NoticeController {
 
 	@GetMapping("/published")
 	@ApiOperation(value = "公告列表")
-	public PageTableResponse<NoticeReadVO> listNoticeReadVO(PageTableRequest request) {
+	public PageTableResponse listNoticeReadVO(PageTableRequest request) {
 		request.getParams().put("userId", UserUtil.getLoginUser().getId());
 
-		return PageTableHandler.<NoticeReadVO> builder().countHandler(new CountHandler() {
+		return new PageTableHandler(new CountHandler() {
 
 			@Override
 			public int count(PageTableRequest request) {
 				return noticeDao.countNotice(request.getParams());
 			}
-		}).listHandler(new ListHandler<NoticeReadVO>() {
+		}, new ListHandler() {
 
 			@Override
 			public List<NoticeReadVO> list(PageTableRequest request) {
 				return noticeDao.listNotice(request.getParams(), request.getOffset(), request.getLimit());
 			}
-		}).build().handle(request);
+		}).handle(request);
 	}
 }

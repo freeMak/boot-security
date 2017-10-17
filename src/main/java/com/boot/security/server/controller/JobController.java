@@ -87,21 +87,21 @@ public class JobController {
 	@GetMapping
 	@ApiOperation(value = "定时任务列表")
 	@PreAuthorize("hasAuthority('job:query')")
-	public PageTableResponse<JobModel> list(PageTableRequest request) {
-		return PageTableHandler.<JobModel> builder().countHandler(new CountHandler() {
+	public PageTableResponse list(PageTableRequest request) {
+		return new PageTableHandler(new CountHandler() {
 
 			@Override
 			public int count(PageTableRequest request) {
 				return jobDao.count(request.getParams());
 			}
-		}).listHandler(new ListHandler<JobModel>() {
+		}, new ListHandler() {
 
 			@Override
 			public List<JobModel> list(PageTableRequest request) {
 				List<JobModel> list = jobDao.list(request.getParams(), request.getOffset(), request.getLimit());
 				return list;
 			}
-		}).build().handle(request);
+		}).handle(request);
 	}
 
 	@ApiOperation(value = "校验cron表达式")

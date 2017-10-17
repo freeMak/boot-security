@@ -3,11 +3,6 @@ package com.boot.security.server.dto;
 import java.io.Serializable;
 import java.util.List;
 
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter
-@Setter
 public class GenerateDetail implements Serializable {
 
 	private static final long serialVersionUID = -164567294469931676L;
@@ -15,4 +10,20 @@ public class GenerateDetail implements Serializable {
 	private String beanName;
 
 	private List<BeanField> fields;
+
+	public String getBeanName() {
+		return beanName;
+	}
+
+	public void setBeanName(String beanName) {
+		this.beanName = beanName;
+	}
+
+	public List<BeanField> getFields() {
+		return fields;
+	}
+
+	public void setFields(List<BeanField> fields) {
+		this.fields = fields;
+	}
 }

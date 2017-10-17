@@ -3,25 +3,49 @@ package com.boot.security.server.page.table;
 import java.io.Serializable;
 import java.util.List;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-
 /**
  * 分页查询返回
  * 
  * @author 小威老师
  *
  */
-@Getter
-@Setter
-@Builder
-public class PageTableResponse<T> implements Serializable {
+public class PageTableResponse implements Serializable {
 
 	private static final long serialVersionUID = 620421858510718076L;
 
 	private Integer recordsTotal;
 	private Integer recordsFiltered;
-	private List<T> data;
+	private List<?> data;
+
+	public PageTableResponse(Integer recordsTotal, Integer recordsFiltered, List<?> data) {
+		super();
+		this.recordsTotal = recordsTotal;
+		this.recordsFiltered = recordsFiltered;
+		this.data = data;
+	}
+
+	public Integer getRecordsTotal() {
+		return recordsTotal;
+	}
+
+	public void setRecordsTotal(Integer recordsTotal) {
+		this.recordsTotal = recordsTotal;
+	}
+
+	public Integer getRecordsFiltered() {
+		return recordsFiltered;
+	}
+
+	public void setRecordsFiltered(Integer recordsFiltered) {
+		this.recordsFiltered = recordsFiltered;
+	}
+
+	public List<?> getData() {
+		return data;
+	}
+
+	public void setData(List<?> data) {
+		this.data = data;
+	}
 
 }

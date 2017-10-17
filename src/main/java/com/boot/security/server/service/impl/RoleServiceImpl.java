@@ -3,6 +3,8 @@ package com.boot.security.server.service.impl;
 import java.util.List;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,11 +16,10 @@ import com.boot.security.server.model.Role;
 import com.boot.security.server.service.RoleService;
 import com.boot.security.server.service.UserService;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j(topic = "adminLogger")
 @Service
 public class RoleServiceImpl implements RoleService {
+
+	private static final Logger log = LoggerFactory.getLogger("adminLogger");
 
 	@Autowired
 	private RoleDao roleDao;

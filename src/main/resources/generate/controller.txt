@@ -53,20 +53,20 @@ public class {controllerName} {
 
     @GetMapping
     @ApiOperation(value = "列表")
-    public PageTableResponse<{beanName}> list(PageTableRequest request) {
-        return PageTableHandler.<{beanName}> builder().countHandler(new CountHandler() {
+    public PageTableResponse list(PageTableRequest request) {
+        return new PageTableHandler(new CountHandler() {
 
             @Override
             public int count(PageTableRequest request) {
                 return {daoParamName}.count(request.getParams());
             }
-        }).listHandler(new ListHandler<{beanName}>() {
+        }, new ListHandler() {
 
             @Override
             public List<{beanName}> list(PageTableRequest request) {
                 return {daoParamName}.list(request.getParams(), request.getOffset(), request.getLimit());
             }
-        }).build().handle(request);
+        }).handle(request);
     }
 
     @DeleteMapping("/{id}")

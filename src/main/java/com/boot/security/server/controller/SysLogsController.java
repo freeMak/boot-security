@@ -30,20 +30,20 @@ public class SysLogsController {
 	@GetMapping
 	@PreAuthorize("hasAuthority('sys:log:query')")
 	@ApiOperation(value = "日志列表")
-	public PageTableResponse<SysLogs> list(PageTableRequest request) {
-		return PageTableHandler.<SysLogs> builder().countHandler(new CountHandler() {
+	public PageTableResponse list(PageTableRequest request) {
+		return new PageTableHandler(new CountHandler() {
 
 			@Override
 			public int count(PageTableRequest request) {
 				return sysLogsDao.count(request.getParams());
 			}
-		}).listHandler(new ListHandler<SysLogs>() {
+		}, new ListHandler() {
 
 			@Override
 			public List<SysLogs> list(PageTableRequest request) {
 				return sysLogsDao.list(request.getParams(), request.getOffset(), request.getLimit());
 			}
-		}).build().handle(request);
+		}).handle(request);
 	}
 
 }

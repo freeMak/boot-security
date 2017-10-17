@@ -1,5 +1,7 @@
 package com.boot.security.server.advice;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
@@ -12,43 +14,41 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 import com.boot.security.server.dto.ResponseInfo;
 
-import lombok.extern.slf4j.Slf4j;
-
 /**
  * springmvc异常处理
  * 
  * @author 小威老师
  *
  */
-@Slf4j(topic = "adminLogger")
 @RestControllerAdvice
 public class ExceptionHandlerAdvice {
+
+	private static final Logger log = LoggerFactory.getLogger("adminLogger");
 
 	@ExceptionHandler({ IllegalArgumentException.class })
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ResponseInfo badRequestException(IllegalArgumentException exception) {
-		return ResponseInfo.builder().code(HttpStatus.BAD_REQUEST.value() + "").message(exception.getMessage()).build();
+		return new ResponseInfo(HttpStatus.BAD_REQUEST.value() + "", exception.getMessage());
 	}
 
 	@ExceptionHandler({ AccessDeniedException.class })
 	@ResponseStatus(HttpStatus.FORBIDDEN)
 	public ResponseInfo badRequestException(AccessDeniedException exception) {
-		return ResponseInfo.builder().code(HttpStatus.FORBIDDEN.value() + "").message(exception.getMessage()).build();
+		return new ResponseInfo(HttpStatus.FORBIDDEN.value() + "", exception.getMessage());
 	}
 
 	@ExceptionHandler({ MissingServletRequestParameterException.class, HttpMessageNotReadableException.class,
 			UnsatisfiedServletRequestParameterException.class, MethodArgumentTypeMismatchException.class })
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ResponseInfo badRequestException(Exception exception) {
-		return ResponseInfo.builder().code(HttpStatus.BAD_REQUEST.value() + "").message(exception.getMessage()).build();
+		return new ResponseInfo(HttpStatus.BAD_REQUEST.value() + "", exception.getMessage());
 	}
 
 	@ExceptionHandler(Throwable.class)
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	public ResponseInfo exception(Throwable throwable) {
 		log.error("系统异常", throwable);
-		return ResponseInfo.builder().code(HttpStatus.INTERNAL_SERVER_ERROR.value() + "")
-				.message(throwable.getMessage()).build();
+		return new ResponseInfo(HttpStatus.INTERNAL_SERVER_ERROR.value() + "", throwable.getMessage());
 
 	}
 

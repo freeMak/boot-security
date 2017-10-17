@@ -3,6 +3,8 @@ package com.boot.security.server.service.impl;
 import java.util.List;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -22,11 +24,10 @@ import com.boot.security.server.service.TokenService;
 import com.boot.security.server.service.UserService;
 import com.google.common.collect.Sets;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j(topic = "adminLogger")
 @Service
 public class UserServiceImpl implements UserService {
+
+	private static final Logger log = LoggerFactory.getLogger("adminLogger");
 
 	@Autowired
 	private UserDao userDao;

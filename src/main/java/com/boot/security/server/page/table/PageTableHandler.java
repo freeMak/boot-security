@@ -3,23 +3,27 @@ package com.boot.security.server.page.table;
 import java.util.ArrayList;
 import java.util.List;
 
-import lombok.Builder;
-
 /**
  * 分页查询处理器
  * 
  * @author 小威老师
  *
  */
-@Builder
-public class PageTableHandler<T> {
+
+public class PageTableHandler {
 
 	private CountHandler countHandler;
-	private ListHandler<T> listHandler;
+	private ListHandler listHandler;
 
-	public PageTableResponse<T> handle(PageTableRequest dtRequest) {
+	public PageTableHandler(CountHandler countHandler, ListHandler listHandler) {
+		super();
+		this.countHandler = countHandler;
+		this.listHandler = listHandler;
+	}
+
+	public PageTableResponse handle(PageTableRequest dtRequest) {
 		int count = 0;
-		List<T> list = null;
+		List<?> list = null;
 
 		count = this.countHandler.count(dtRequest);
 		if (count > 0) {
@@ -27,14 +31,14 @@ public class PageTableHandler<T> {
 		}
 
 		if (list == null) {
-			list = new ArrayList<T>();
+			list = new ArrayList<>();
 		}
 
-		return PageTableResponse.<T> builder().recordsTotal(count).recordsFiltered(count).data(list).build();
+		return new PageTableResponse(count, count, list);
 	}
 
-	public interface ListHandler<T> {
-		List<T> list(PageTableRequest request);
+	public interface ListHandler {
+		List<?> list(PageTableRequest request);
 	}
 
 	public interface CountHandler {

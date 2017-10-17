@@ -72,21 +72,21 @@ public class FileController {
 	@GetMapping
 	@ApiOperation(value = "文件查询")
 	@PreAuthorize("hasAuthority('sys:file:query')")
-	public PageTableResponse<FileInfo> listFiles(PageTableRequest request) {
-		return PageTableHandler.<FileInfo> builder().countHandler(new CountHandler() {
+	public PageTableResponse listFiles(PageTableRequest request) {
+		return new PageTableHandler(new CountHandler() {
 
 			@Override
 			public int count(PageTableRequest request) {
 				return fileInfoDao.count(request.getParams());
 			}
-		}).listHandler(new ListHandler<FileInfo>() {
+		}, new ListHandler() {
 
 			@Override
 			public List<FileInfo> list(PageTableRequest request) {
 				List<FileInfo> list = fileInfoDao.list(request.getParams(), request.getOffset(), request.getLimit());
 				return list;
 			}
-		}).build().handle(request);
+		}).handle(request);
 	}
 
 	@LogAnnotation
