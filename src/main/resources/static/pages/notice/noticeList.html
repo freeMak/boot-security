@@ -100,7 +100,7 @@ function init(){
     				d.status = $('#status').val();
     				d.beginTime = $('#beginTime').val();
     				d.endTime = $('#endTime').val();
-    			},
+        		},
     			"error":function(xhr, textStatus, errorThrown){
     				var msg = xhr.responseText;
     				console.log(msg)
@@ -111,15 +111,9 @@ function init(){
                 { "data": "id", "defaultContent": ""},
                 { "data": "title", "defaultContent": ""},
                 { "data": "updateTime", "defaultContent": ""},
-                { "data": "status", "defaultContent": ""},
-                { "data": "", "defaultContent": ""},
-            ],
-            "columnDefs": [
-                { "name": "id", "targets": 0 },
-                { "name": "title", "targets": 1 },
-                { "name": "updateTime", "targets": 2 },
                 { 
-                	"targets": 3,
+                	"data": "status", 
+                	"defaultContent": "",
                 	"render": function (data, type, row) {
                 		var status = row['status'];
                 		var a = "";
@@ -132,7 +126,8 @@ function init(){
                   	}
                 },
                 { 
-                	"targets": 4,
+                	"data": "", 
+                	"defaultContent": "",
                 	"render": function (data, type, row) {
                 		var id = row['id'];
                 		var status = row['status'];
@@ -143,9 +138,9 @@ function init(){
                 		}
                         var del = buttonDel(id, "notice:del", pers);
                         return edit + del + "<button class='layui-btn layui-btn-mini' title='详情' onclick='showDetail(\"" + id +"\")'><i class='layui-icon'>&#xe65f;</i></button>";
-                  }
-                }
-              ],
+                     }
+                },
+            ],
             "order": [[ 2, "desc" ],[1, "desc"]]
         } );
 }

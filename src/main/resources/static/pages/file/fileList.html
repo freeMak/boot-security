@@ -90,16 +90,9 @@ function init(){
         	},
         	"dom": "<'dt-toolbar'r>t<'dt-toolbar-footer'<'col-sm-10 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-10' p v>>",	
             "columns": [
-                { "data": "url", "defaultContent": ""},
-                { "data": "path", "defaultContent": ""},
-                { "data": "contentType", "defaultContent": ""},
-                { "data": "updateTime", "defaultContent": ""},
-                { "data": "", "defaultContent": ""},
-                
-            ],
-            "columnDefs": [
                 { 
-                	"targets": 0,
+                	"data": "url", 
+                	"defaultContent": "",
                 	"render": function (data, type, row) {
                 		var url = row['url'];
                 		var type = row['type'];
@@ -113,18 +106,20 @@ function init(){
                     	return u;
                   	}
                 },
-                { "name": "path", "targets": 1 },
-                { "name": "contentType", "targets": 2 },
-                { "name": "updateTime", "targets": 3 },
+                { "data": "path", "defaultContent": ""},
+                { "data": "contentType", "defaultContent": ""},
+                { "data": "updateTime", "defaultContent": ""},
                 { 
-                	"targets": 4,
+                	"data": "", 
+                	"defaultContent": "",
                 	"render": function (data, type, row) {
                 		var id = row['id'];
                         var del = buttonDel(id, "sys:file:del", pers);
                         return del;
                   	}
-                }
-              ],
+                },
+                
+            ],
            "order": [[ 3, "desc" ]]
         } );
 }

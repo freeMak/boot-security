@@ -253,9 +253,7 @@ public class TemplateUtil {
 		text = text.replace("{beanName}", beanName);
 		List<String> beanFieldNames = input.getBeanFieldName();
 		text = text.replace("{columnsDatas}", getHtmlColumnsDatas(beanFieldNames));
-		text = text.replace("{columnDefs}", getHtmlColumnDefs(beanFieldNames));
 		text = text.replace("{ths}", getHtmlThs(beanFieldNames));
-		text = text.replace("{lastIndex}", beanFieldNames.size() + "");
 
 		FileUtil.saveTextFile(text, path + File.separator + beanParamName + "List.html");
 		log.debug("生成查询页面：{}模板", beanName);
@@ -318,12 +316,4 @@ public class TemplateUtil {
 		return builder.toString();
 	}
 
-	private static String getHtmlColumnDefs(List<String> beanFieldNames) {
-		StringBuilder builder = new StringBuilder();
-		for (int i = 0; i < beanFieldNames.size(); i++) {
-			builder.append("\t\t\t\t{\"name\" : \"" + beanFieldNames.get(i) + "\", \"targets\" : \"" + i + "\"},\n");
-		}
-
-		return builder.toString();
-	}
 }

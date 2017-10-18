@@ -107,35 +107,28 @@ function init(){
         	"dom": "<'dt-toolbar'r>t<'dt-toolbar-footer'<'col-sm-10 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-10' p v>>",	
             "columns": [
 				{"data" : "id", "defaultContent" : ""},
-				{"data" : "user", "defaultContent" : ""},
+				{
+					"data" : "user", 
+					"defaultContent" : "",
+					"render": function (data, type, row) {
+                		var user = row['user'];
+                        return user['nickname'];
+                  	}
+				},
 				{"data" : "module", "defaultContent" : ""},
-				{"data" : "flag", "defaultContent" : ""},
+				{
+					"data" : "flag", 
+					"defaultContent" : "",
+					"render": function (data, type, row) {
+                		var flag = row['flag'];
+                        return flag ? "成功":"失败";
+                  	}
+				},
 				{"data" : "remark", "defaultContent" : ""},
 				{"data" : "createTime", "defaultContent" : ""},
 
                 
             ],
-            "columnDefs": [
-				{"name" : "id", "targets" : 0},
-				{ 
-                	"targets": 1,
-                	"render": function (data, type, row) {
-                		var user = row['user'];
-                        return user['nickname'];
-                  	}
-                },
-				{"name" : "module", "targets" : 2},
-				{ 
-                	"targets": 3,
-                	"render": function (data, type, row) {
-                		var flag = row['flag'];
-                        return flag ? "成功":"失败";
-                  	}
-                },
-				{"name" : "remark", "targets" : 4},
-				{"name" : "createTime", "targets" : 5},
-
-              ],
            "order": [[ 5, "desc" ]]
         } );
 }

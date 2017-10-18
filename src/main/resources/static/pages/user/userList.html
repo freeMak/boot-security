@@ -106,17 +106,9 @@ function init(){
                 { "data": "nickname", "defaultContent": ""},
                 { "data": "phone", "defaultContent": ""},
                 { "data": "email", "defaultContent": ""},
-                { "data": "status", "defaultContent": ""},
-                { "data": "", "defaultContent": ""},
-                
-            ],
-            "columnDefs": [
-                { "name": "username", "targets": 0 },
-                { "name": "nickname", "targets": 1 },
-                { "name": "phone", "targets": 2 },
-                { "name": "email", "targets": 3 },
                 { 
-                	"targets": 4,
+                	"data": "status", 
+                	"defaultContent": "",
                 	"render": function (data, type, row) {
                 		var status = row['status'];
                 		var a = "";
@@ -131,15 +123,17 @@ function init(){
                   	}
                 },
                 { 
-                	"targets": 5,
+                	"data": "", 
+                	"defaultContent": "",
                 	"render": function (data, type, row) {
                 		var id = row['id'];
                 		var href = "updateUser.html?id=" + id;
                 		var edit = buttonEdit(href, "sys:user:add", pers);
                         return edit;
                   }
-                }
-              ],
+                },
+                
+            ],
             "order": [[ 0, "desc" ],[1, "asc"]]
         } );
 }

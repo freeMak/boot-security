@@ -88,14 +88,9 @@ function init(){
                 { "data": "name", "defaultContent": ""},
                 { "data": "description", "defaultContent": ""},
                 { "data": "updateTime", "defaultContent": ""},
-                { "data": "", "defaultContent": ""},
-            ],
-            "columnDefs": [
-                { "name": "name", "targets": 0 },
-                { "name": "description", "targets": 1 },
-                { "name": "updateTime", "targets": 2},
                 { 
-                	"targets": 3,
+                	"data": "", 
+                	"defaultContent": "",
                 	"render": function (data, type, row) {
                 		var id = row['id'];
                 		var href = "addRole.html?id=" + id;
@@ -104,8 +99,8 @@ function init(){
                         return edit + del;
                   	}
                 },
-              ],
-              "order": [[ 2, "desc" ]]
+            ],
+            "order": [[ 2, "desc" ]]
         } );
 }
 

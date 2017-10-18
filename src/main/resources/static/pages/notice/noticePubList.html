@@ -93,10 +93,6 @@ function init(){
     				d.beginTime = $('#beginTime').val();
     				d.endTime = $('#endTime').val();
     				d.isRead = $('#isRead').val();
-        		},
-    			"error":function(xhr, textStatus, errorThrown){
-    				var msg = xhr.responseText;
-    				console.log(msg)
     			}
         	},
         	"dom": "<'dt-toolbar'r>t<'dt-toolbar-footer'<'col-sm-10 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-10' p v>>",	
@@ -104,42 +100,26 @@ function init(){
                 { "data": "title", "defaultContent": ""},
                 { "data": "updateTime", "defaultContent": ""},
                 { "data": "readTime", "defaultContent": ""},
-                { "data": "", "defaultContent": ""},
-            ],
-            "columnDefs": [
                 { 
-                	"targets": 0,
-                	"render": function (data, type, row) {
-                		var title = row['title'];
-                        return title;
-                  }
-                },
-                { "name": "updateTime", "targets": 1 },
-                { 
-                	"targets": 2,
+                	"data": "", 
+                	"defaultContent": "",
                 	"render": function (data, type, row) {
                 		var isRead = row['isRead'];
                 		if(isRead){
                 			return "已读";
                 		}
                         return "<span style='color:red'>未读</span>";
-                  }
+                     }
                 },
                 { 
-                	"targets": 3,
-                	"render": function (data, type, row) {
-                		var readTime = row['readTime'];
-                        return readTime;
-                  }
-                },
-                { 
-                	"targets": 4,
+                	"data": "", 
+                	"defaultContent": "",
                 	"render": function (data, type, row) {
                 		var id = row['id'];
                 		return "<button class='layui-btn layui-btn-mini' title='详情' onclick='showDetail(this,\"" + id +"\")'><i class='layui-icon'>&#xe65f;</i></button>";
-                  }
-                }
-              ],
+                    }
+                },
+            ],
             "order": [[ 2, "asc" ],[1, "desc"]]
         } );
 }

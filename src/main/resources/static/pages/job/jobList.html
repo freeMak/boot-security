@@ -102,19 +102,9 @@ function init(){
                 { "data": "springBeanName", "defaultContent": ""},
                 { "data": "methodName", "defaultContent": ""},
                 { "data": "description", "defaultContent": ""},
-                { "data": "status", "defaultContent": ""},
-                { "data": "updateTime", "defaultContent": ""},
-                { "data": "", "defaultContent": ""},
-            ],
-            "columnDefs": [
-                { "name": "id", "targets": 0 },
-                { "name": "jobName", "targets": 1 },
-                { "name": "cron", "targets": 2 },
-                { "name": "springBeanName", "targets": 3 },
-                { "name": "methodName", "targets": 4 },
-                { "name": "description", "targets": 5 },
                 { 
-                	"targets": 6,
+                	"data": "status", 
+                	"defaultContent": "",
                 	"render": function (data, type, row) {
                 		var status = row['status'];
                 		var a = "";
@@ -126,9 +116,10 @@ function init(){
                     	return a;
                   	}
                 },
-                { "name": "updateTime", "targets": 7},
+                { "data": "updateTime", "defaultContent": ""},
                 { 
-                	"targets": 8,
+                	"data": "", 
+                	"defaultContent": "",
                 	"render": function (data, type, row) {
                 		var isSysJob = row['isSysJob'];
                 		if(!isSysJob) {
@@ -142,8 +133,8 @@ function init(){
                 		}
                   	}
                 },
-              ],
-              "order": [[6, "desc"],[ 7, "desc" ]]
+            ],
+            "order": [[6, "desc"],[ 7, "desc" ]]
         } );
 }
 

@@ -80,22 +80,19 @@ function init(){
         	},
         	"dom": "<'dt-toolbar'r>t<'dt-toolbar-footer'<'col-sm-10 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-10' p v>>",	
             "columns": [
-{columnsDatas}				{ "data": "", "defaultContent": ""},
+{columnsDatas}				{ 
+								"data": "", 
+								"defaultContent": "",
+						        "render": function (data, type, row) {
+                		           var id = row['id'];
+                		           var href = "update{beanName}.html?id=" + id;
+                                   var edit = buttonEdit(href, "", pers);
+                		           var del = buttonDel(id, "", pers);
+                                   return edit + del;
+                  	            }		
+							},
                 
             ],
-            "columnDefs": [
-{columnDefs}
-				{ 
-                	"targets": {lastIndex},
-                	"render": function (data, type, row) {
-                		var id = row['id'];
-                		var href = "update{beanName}.html?id=" + id;
-                        var edit = buttonEdit(href, "", pers);
-                		var del = buttonDel(id, "", pers);
-                        return edit + del;
-                  	}
-                },
-              ],
            "order": [[ 0, "asc" ]]
         } );
 }
