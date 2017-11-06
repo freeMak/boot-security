@@ -37,7 +37,7 @@ function initBeanNames() {
 				select.append("<option value='" + v + "'>" + v + "</option>")
 			}
 			
-			 $('.selectpicker').selectpicker();
+			$("#springBeanName").selectpicker('refresh');
 		}
 	});
 }
