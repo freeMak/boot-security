@@ -28,7 +28,7 @@
 												<option value="0">未读</option>
 												<option value="1">已读</option>
 											</select>
-											<button id="searchBt" class="layui-btn layui-btn-small"><i class="layui-icon">&#xe615;</i>搜索</button>
+											<button id="searchBt" class="layui-btn layui-btn-sm"><i class="layui-icon">&#xe615;</i>搜索</button>
 										</div>
 									</form>
 								</td>
@@ -119,7 +119,7 @@ function init(){
                 	"defaultContent": "",
                 	"render": function (data, type, row) {
                 		var id = row['id'];
-                		return "<button class='layui-btn layui-btn-mini' title='详情' onclick='showDetail(this,\"" + id +"\")'><i class='layui-icon'>&#xe65f;</i></button>";
+                		return "<button class='layui-btn layui-btn-xs' title='详情' onclick='showDetail(this,\"" + id +"\")'><i class='layui-icon'>&#xe65f;</i></button>";
                     }
                 },
             ],

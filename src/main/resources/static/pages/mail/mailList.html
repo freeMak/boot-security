@@ -22,12 +22,12 @@
 											时间：
 											<input type="text" class="form-control" placeholder="开始时间" id="beginTime">
 											<input type="text" class="form-control" placeholder="结束时间" id="endTime">
-											<button id="searchBt" class="layui-btn layui-btn-small" permission="mail:all:query"><i class="layui-icon">&#xe615;</i>搜索</button>
+											<button id="searchBt" class="layui-btn layui-btn-sm" permission="mail:all:query"><i class="layui-icon">&#xe615;</i>搜索</button>
 										</div>
 									</form>
 								</td>
 								<td align="right">
-									<button class="layui-btn layui-btn-small" onclick="location.href='addMail.html'" permission="mail:send">
+									<button class="layui-btn layui-btn-sm" onclick="location.href='addMail.html'" permission="mail:send">
 									  <i class="layui-icon">&#xe608;</i> 添加
 									</button>
 	                   			</td>
@@ -122,7 +122,7 @@ function init(){
                 	"render": function (data, type, row) {
                 		var id = row['id'];
                 		var href = "mailDetail.html?id=" + id;
-                        return "<button class='layui-btn layui-btn-mini' title='编辑' onclick='window.location=\"" + href +"\"'>详情</button>";
+                        return "<button class='layui-btn layui-btn-xs' title='编辑' onclick='window.location=\"" + href +"\"'>详情</button>";
                     }
                 },
             ],

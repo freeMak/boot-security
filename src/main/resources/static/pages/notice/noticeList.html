@@ -28,12 +28,12 @@
 												<option value="0">草稿</option>
 												<option value="1">发布</option>
 											</select>
-											<button id="searchBt" class="layui-btn layui-btn-small" permission="notice:query"><i class="layui-icon">&#xe615;</i>搜索</button>
+											<button id="searchBt" class="layui-btn layui-btn-sm" permission="notice:query"><i class="layui-icon">&#xe615;</i>搜索</button>
 										</div>
 									</form>
 								</td>
 								<td align="right">
-									<button class="layui-btn layui-btn-small" onclick="location.href='addNotice.html'" permission="notice:add">
+									<button class="layui-btn layui-btn-sm" onclick="location.href='addNotice.html'" permission="notice:add">
 									  <i class="layui-icon">&#xe608;</i> 添加
 									</button>
 	                   			</td>
@@ -137,10 +137,10 @@ function init(){
                 		var href = "updateNotice.html?id=" + id;
                 		var edit = buttonEdit(href, "notice:add", pers);
                 		if(status == 1){
-                			edit = "<button class='layui-btn layui-btn-mini' style='background-color:#c2c2c2;' title='不可编辑'><i class='layui-icon' style='color: #F0F0F0;'>&#xe642;</i></button>";
+                			edit = "<button class='layui-btn layui-btn-xs' style='background-color:#c2c2c2;' title='不可编辑'><i class='layui-icon' style='color: #F0F0F0;'>&#xe642;</i></button>";
                 		}
                         var del = buttonDel(id, "notice:del", pers);
-                        return edit + del + "<button class='layui-btn layui-btn-mini' title='详情' onclick='showDetail(\"" + id +"\")'><i class='layui-icon'>&#xe65f;</i></button>";
+                        return edit + del + "<button class='layui-btn layui-btn-xs' title='详情' onclick='showDetail(\"" + id +"\")'><i class='layui-icon'>&#xe65f;</i></button>";
                      }
                 },
             ],

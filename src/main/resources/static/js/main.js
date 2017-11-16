@@ -26,6 +26,9 @@ function initMenu(){
 	             }
 	             
 	             var li = $("<li class='layui-nav-item'></li>");
+	             if (i == 0) {
+	            	 li.addClass("layui-nav-itemed");
+	             }
 	             li.append(a);
 	             
 	             //二级菜单
