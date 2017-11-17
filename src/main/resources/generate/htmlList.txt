@@ -20,12 +20,12 @@
 										<div class="form-group">
 											id：
 											<input id="id" type="text" class="form-control" placeholder="id">
-											<button id="searchBt" class="layui-btn layui-btn-small"><i class="layui-icon">&#xe615;</i>搜索</button>
+											<button id="searchBt" class="layui-btn layui-btn-sm"><i class="layui-icon">&#xe615;</i>搜索</button>
 										</div>
 									</form>
 	                   			</td>
 	                   			<td align="right">
-	                   				<button class="layui-btn layui-btn-small" onclick="location.href='add{beanName}.html'">
+	                   				<button class="layui-btn layui-btn-sm" onclick="location.href='add{beanName}.html'">
                                       <i class="layui-icon">&#xe608;</i> 添加
                                     </button>
 	                   			</td>
