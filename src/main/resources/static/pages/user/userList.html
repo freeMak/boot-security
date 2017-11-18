@@ -23,10 +23,6 @@
 											<input id="nickname" type="text" class="form-control" placeholder="昵称">
 											状态：
 											<select class="form-control input-sm" id="status">
-												<option value="">全部</option>
-												<option value="1">正常</option>
-												<option value="2">锁定</option>
-												<option value="0">无效</option>
 											</select>
 											<button id="searchBt" class="layui-btn layui-btn-sm" permission="sys:user:query"><i class="layui-icon">&#xe615;</i>搜索</button>
 										</div>
@@ -73,10 +69,12 @@
 <script type="text/javascript" src="../../js/plugin/datatables/dataTables.bootstrap.min.js"></script>
 <script type="text/javascript" src="../../js/my/permission.js"></script>
 <script type="text/javascript" src="../../layui/layui.js"></script>
+<script type="text/javascript" src="../../js/dict.js"></script>
 <script type="text/javascript">
 layui.use([ 'layer' ], function() {
 	var layer = layui.layer;
 });
+var userStatus = showDictSelect("status", "userStatus", true);
 
 var pers = checkPermission();
 
@@ -113,16 +111,7 @@ function init(){
                 	"data": "status", 
                 	"defaultContent": "",
                 	"render": function (data, type, row) {
-                		var status = row['status'];
-                		var a = "";
-                		if(status == 0){
-                			a = "无效";
-                		} else if(status == 1){
-                			a = "正常";
-                		} else {
-                			a = "<span style='color:red'>锁定</span>";
-                		}
-                    	return a;
+                    	return userStatus[data];
                   	}
                 },
                 { 

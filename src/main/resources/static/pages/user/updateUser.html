@@ -48,8 +48,6 @@
                 <label class="col-md-2 control-label">性别</label>
                 <div class="col-md-10" style="width: 100px">
                     <select class="form-control input-sm" name="sex" id="sex">
-                        <option value="1">男</option>
-                        <option value="0">女</option>
                     </select>
                 </div>
             </div>
@@ -57,9 +55,6 @@
                 <label class="col-md-2 control-label">状态</label>
                 <div class="col-md-10" style="width: 100px">
                     <select class="form-control input-sm" name="status" id="status">
-                        <option value="1">正常</option>
-                        <option value="2">锁定</option>
-                        <option value="0">无效</option>
                     </select>
                 </div>
             </div>
@@ -89,6 +84,7 @@
 	<script type="text/javascript" src="../../js/common.js"></script>
 	<script type="text/javascript" src="../../js/my/roles/role.js"></script>
 	<script type="text/javascript" src="../../layui/layui.js"></script>
+	<script type="text/javascript" src="../../js/dict.js"></script>
 	<script type="text/javascript">
 	layui.use(['layer','laydate'], function(){
 	    var layer = layui.layer;
@@ -97,6 +93,9 @@
            elem: '#birthday'
         });
 	});
+	
+	showDictSelect("sex", "sex");
+	showDictSelect("status", "userStatus");
 	
 	initRoles();
 	

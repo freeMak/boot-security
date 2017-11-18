@@ -57,9 +57,7 @@
 			<div class="form-group">
 				<label class="col-md-2 control-label">性别</label>
 				<div class="col-md-10" style="width: 100px">
-					<select class="form-control input-sm" name="sex">
-						<option value="1">男</option>
-						<option value="0">女</option>
+					<select class="form-control input-sm" name="sex" id="sex">
 					</select>
 				</div>
 			</div>
@@ -89,6 +87,7 @@
 	<script type="text/javascript" src="../../js/common.js"></script>
 	<script type="text/javascript" src="../../js/my/roles/role.js"></script>
 	<script type="text/javascript" src="../../layui/layui.js"></script>
+	<script type="text/javascript" src="../../js/dict.js"></script>
 	<script type="text/javascript">
 		layui.use(['layer','laydate'], function(){
 		    var layer = layui.layer;
@@ -98,6 +97,7 @@
 	        });
 		});
 
+		showDictSelect("sex", "sex");
 		initRoles();
 	
 		$('#form').bootstrapValidator();

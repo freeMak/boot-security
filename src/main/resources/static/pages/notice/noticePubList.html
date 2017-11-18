@@ -24,9 +24,6 @@
 											<input type="text" class="form-control" placeholder="结束时间" id="endTime">
 											状态：
 											<select class="form-control input-sm" id="isRead">
-												<option value="">全部</option>
-												<option value="0">未读</option>
-												<option value="1">已读</option>
 											</select>
 											<button id="searchBt" class="layui-btn layui-btn-sm"><i class="layui-icon">&#xe615;</i>搜索</button>
 										</div>
@@ -66,6 +63,7 @@
 <script type="text/javascript" src="../../layui/layui.js"></script>
 <script type="text/javascript" src="../../js/plugin/datatables/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="../../js/plugin/datatables/dataTables.bootstrap.min.js"></script>
+<script type="text/javascript" src="../../js/dict.js"></script>
 <script type="text/javascript">
 layui.use(['layer','laydate'], function(){
     var layer = layui.layer;
@@ -77,6 +75,8 @@ layui.use(['layer','laydate'], function(){
        elem: '#endTime'
     });
 });
+
+var isRead = showDictSelect("isRead", "isRead", true);
 
 var example;
 function init(){

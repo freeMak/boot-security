@@ -72,6 +72,7 @@
 <script type="text/javascript" src="../../js/plugin/datatables/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="../../js/plugin/datatables/dataTables.bootstrap.min.js"></script>
 <script type="text/javascript" src="../../js/my/permission.js"></script>
+<script type="text/javascript" src="../../js/dict.js"></script>
 <script type="text/javascript">
 var pers = checkPermission();
 layui.use(['layer','laydate'], function(){
@@ -84,6 +85,8 @@ layui.use(['layer','laydate'], function(){
        elem: '#endTime'
     });
 });
+
+var noticeStatus = showDictSelect("status", "noticeStatus", true);
 
 var example;
 function init(){
@@ -118,14 +121,7 @@ function init(){
                 	"data": "status", 
                 	"defaultContent": "",
                 	"render": function (data, type, row) {
-                		var status = row['status'];
-                		var a = "";
-                		if(status == 0){
-                			a = "草稿";
-                		} else if(status == 1){
-                			a = "发布";
-                		}
-                    	return a;
+                    	return noticeStatus[data];
                   	}
                 },
                 { 

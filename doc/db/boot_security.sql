@@ -277,7 +277,10 @@ INSERT INTO `sys_permission` VALUES ('33', '30', '删除', '', '', '2', 'job:del
 INSERT INTO `sys_permission` VALUES ('34', '0', 'excel导出', 'fa-arrow-circle-down', 'pages/excel/sql.html', '1', '', '16');
 INSERT INTO `sys_permission` VALUES ('35', '34', '导出', '', '', '2', 'excel:down', '100');
 INSERT INTO `sys_permission` VALUES ('36', '34', '页面显示数据', '', '', '2', 'excel:show:datas', '100');
-
+INSERT INTO `sys_permission` VALUES ('37', '0', '字典管理', 'fa-reddit', 'pages/dict/dictList.html', '1', '', '17');
+INSERT INTO `sys_permission` VALUES ('38', '37', '查询', '', '', '2', 'dict:query', '100');
+INSERT INTO `sys_permission` VALUES ('39', '37', '新增', '', '', '2', 'dict:add', '100');
+INSERT INTO `sys_permission` VALUES ('40', '37', '删除', '', '', '2', 'dict:del', '100');
 -- ----------------------------
 -- Table structure for sys_role
 -- ----------------------------
@@ -346,6 +349,10 @@ INSERT INTO `sys_role_permission` VALUES ('1', '33');
 INSERT INTO `sys_role_permission` VALUES ('1', '34');
 INSERT INTO `sys_role_permission` VALUES ('1', '35');
 INSERT INTO `sys_role_permission` VALUES ('1', '36');
+INSERT INTO `sys_role_permission` VALUES ('1', '37');
+INSERT INTO `sys_role_permission` VALUES ('1', '38');
+INSERT INTO `sys_role_permission` VALUES ('1', '39');
+INSERT INTO `sys_role_permission` VALUES ('1', '40');
 INSERT INTO `sys_role_permission` VALUES ('2', '1');
 INSERT INTO `sys_role_permission` VALUES ('2', '2');
 INSERT INTO `sys_role_permission` VALUES ('2', '3');
@@ -419,6 +426,33 @@ CREATE TABLE `sys_user` (
 INSERT INTO `sys_user` VALUES ('1', 'admin', '$2a$10$iYM/H7TrSaLs7XyIWQdGwe1xf4cdmt3nwMja6RT0wxG5YY1RjN0EK', '管理员', null, '', '', '', '1998-07-01', '0', '1', '2017-04-10 15:21:38', '2017-07-06 09:20:19');
 INSERT INTO `sys_user` VALUES ('2', 'user', '$2a$10$ooGb4wjT7Hg3zgU2RhZp6eVu3jvG29i/U4L6VRwiZZ4.DZ0OOEAHu', '用户', null, '', '', '', null, '1', '1', '2017-08-01 21:47:18', '2017-08-01 21:47:18');
 
+-- ----------------------------
+-- Table structure for t_dict
+-- ----------------------------
+DROP TABLE IF EXISTS `t_dict`;
+CREATE TABLE `t_dict` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `type` varchar(16) NOT NULL,
+  `k` varchar(16) NOT NULL,
+  `val` varchar(64) NOT NULL,
+  `createTime` datetime NOT NULL,
+  `updateTime` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `type` (`type`,`k`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of t_dict
+-- ----------------------------
+INSERT INTO `t_dict` VALUES ('1', 'sex', '0', '女', '2017-11-17 09:58:24', '2017-11-18 14:21:05');
+INSERT INTO `t_dict` VALUES ('2', 'sex', '1', '男', '2017-11-17 10:03:46', '2017-11-17 10:03:46');
+INSERT INTO `t_dict` VALUES ('3', 'userStatus', '0', '无效', '2017-11-17 16:26:06', '2017-11-17 16:26:09');
+INSERT INTO `t_dict` VALUES ('4', 'userStatus', '1', '正常', '2017-11-17 16:26:06', '2017-11-17 16:26:09');
+INSERT INTO `t_dict` VALUES ('5', 'userStatus', '2', '锁定', '2017-11-17 16:26:06', '2017-11-17 16:26:09');
+INSERT INTO `t_dict` VALUES ('6', 'noticeStatus', '0', '草稿', '2017-11-17 16:26:06', '2017-11-17 16:26:09');
+INSERT INTO `t_dict` VALUES ('7', 'noticeStatus', '1', '发布', '2017-11-17 16:26:06', '2017-11-17 16:26:09');
+INSERT INTO `t_dict` VALUES ('8', 'isRead', '0', '未读', '2017-11-17 16:26:06', '2017-11-17 16:26:09');
+INSERT INTO `t_dict` VALUES ('9', 'isRead', '1', '已读', '2017-11-17 16:26:06', '2017-11-17 16:26:09');
 -- ----------------------------
 -- Table structure for t_job
 -- ----------------------------

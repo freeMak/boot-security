@@ -26,8 +26,6 @@
 				<label class="col-md-2 control-label">状态</label>
 				<div class="col-md-10" style="width: 100px">
 					<select class="form-control input-sm" name="status" id="status">
-						<option value="0">草稿</option>
-						<option value="1">发布</option>
 					</select>
 				</div>
 			</div>
@@ -50,8 +48,9 @@
 	<script type="text/javascript" src="../../js/jq.js"></script>
 	<script type="text/javascript" src="../../layui/layui.js"></script>
 	<script type="text/javascript" src="../../js/common.js"></script>
+	<script type="text/javascript" src="../../js/dict.js"></script>
 	<script type="text/javascript">
-	
+	showDictSelect("status", "noticeStatus");
 	initData();
 	
 	function initData(){
