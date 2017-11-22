@@ -83,6 +83,7 @@ function init(){
 {columnsDatas}				{ 
 								"data": "", 
 								"defaultContent": "",
+								"orderable":false,
 						        "render": function (data, type, row) {
                 		           var id = row['id'];
                 		           var href = "update{beanName}.html?id=" + id;
