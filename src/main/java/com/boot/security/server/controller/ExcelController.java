@@ -8,6 +8,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,6 +28,8 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 @RequestMapping("/excels")
 public class ExcelController {
+	
+	private static final Logger log = LoggerFactory.getLogger("adminLogger");
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
@@ -33,6 +37,7 @@ public class ExcelController {
 	@ApiOperation("校验sql，并返回sql返回的数量")
 	@PostMapping("/sql-count")
 	public Integer checkSql(String sql) {
+		log.info(sql);
 		sql = getAndCheckSql(sql);
 
 		Integer count = 0;
