@@ -56,6 +56,6 @@ log:
   maxsize: 30MB
 token:
   expire:
-    seconds: 86400
+    seconds: 7200
 server:
   port: 8080

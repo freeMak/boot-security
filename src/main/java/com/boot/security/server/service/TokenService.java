@@ -14,12 +14,10 @@ public interface TokenService {
 
 	Token saveToken(LoginUser loginUser);
 
-	void updateLoginUser(LoginUser loginUser);
+	void refresh(LoginUser loginUser);
 
 	LoginUser getLoginUser(String token);
 
 	boolean deleteToken(String token);
-
-	String getTokenByUserId(Long userId);
 
 }

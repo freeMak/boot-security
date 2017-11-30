@@ -1,28 +1,20 @@
 package com.boot.security.server.service.impl;
 
 import java.util.List;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
-import com.boot.security.server.dao.PermissionDao;
 import com.boot.security.server.dao.UserDao;
-import com.boot.security.server.dto.LoginUser;
 import com.boot.security.server.dto.UserDto;
-import com.boot.security.server.model.Permission;
 import com.boot.security.server.model.SysUser;
 import com.boot.security.server.model.SysUser.Status;
-import com.boot.security.server.service.TokenService;
 import com.boot.security.server.service.UserService;
-import com.google.common.collect.Sets;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -33,10 +25,6 @@ public class UserServiceImpl implements UserService {
 	private UserDao userDao;
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
-	@Autowired
-	private PermissionDao permissionDao;
-	@Autowired
-	private TokenService tokenService;
 
 	@Override
 	@Transactional
@@ -86,34 +74,8 @@ public class UserServiceImpl implements UserService {
 	public SysUser updateUser(UserDto userDto) {
 		userDao.update(userDto);
 		saveUserRoles(userDto.getId(), userDto.getRoleIds());
-		updateLoginUserCache(Sets.newHashSet(userDto.getId()));
 
 		return userDto;
 	}
 
-	/**
-	 * 修改登陆用户的缓存
-	 */
-	@Override
-	public void updateLoginUserCache(Set<Long> userIds) {
-		if (CollectionUtils.isEmpty(userIds)) {
-			return;
-		}
-
-		userIds.parallelStream().forEach(userId -> {
-			String token = tokenService.getTokenByUserId(userId);
-			if (!StringUtils.isEmpty(token)) {
-				SysUser sysUser = userDao.getById(userId);
-
-				LoginUser loginUser = new LoginUser();
-				loginUser.setToken(token);
-				BeanUtils.copyProperties(sysUser, loginUser);
-
-				List<Permission> permissions = permissionDao.listByUserId(sysUser.getId());
-				loginUser.setPermissions(permissions);
-
-				tokenService.updateLoginUser(loginUser);
-			}
-		});
-	}
 }

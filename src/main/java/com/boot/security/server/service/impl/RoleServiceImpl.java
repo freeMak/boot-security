@@ -1,7 +1,6 @@
 package com.boot.security.server.service.impl;
 
 import java.util.List;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +13,6 @@ import com.boot.security.server.dao.RoleDao;
 import com.boot.security.server.dto.RoleDto;
 import com.boot.security.server.model.Role;
 import com.boot.security.server.service.RoleService;
-import com.boot.security.server.service.UserService;
 
 @Service
 public class RoleServiceImpl implements RoleService {
@@ -23,8 +21,6 @@ public class RoleServiceImpl implements RoleService {
 
 	@Autowired
 	private RoleDao roleDao;
-	@Autowired
-	private UserService userService;
 
 	@Override
 	@Transactional
@@ -60,31 +56,22 @@ public class RoleServiceImpl implements RoleService {
 		}
 
 		roleDao.update(role);
-		Set<Long> userIds = listUserIds(role.getId());
 
 		roleDao.deleteRolePermission(role.getId());
 		if (!CollectionUtils.isEmpty(permissionIds)) {
 			roleDao.saveRolePermission(role.getId(), permissionIds);
 		}
 		log.debug("修改角色{}", role.getName());
-
-		userService.updateLoginUserCache(userIds);
 	}
 
 	@Override
 	@Transactional
 	public void deleteRole(Long id) {
-		Set<Long> userIds = listUserIds(id);
 		roleDao.deleteRolePermission(id);
 		roleDao.deleteRoleUser(id);
 		roleDao.delete(id);
 
 		log.debug("删除角色id:{}", id);
-		userService.updateLoginUserCache(userIds);
-	}
-
-	private Set<Long> listUserIds(Long roleId) {
-		return roleDao.listUserIds(roleId);
 	}
 
 }

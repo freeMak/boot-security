@@ -1,7 +1,5 @@
 package com.boot.security.server.service;
 
-import java.util.Set;
-
 import com.boot.security.server.dto.UserDto;
 import com.boot.security.server.model.SysUser;
 
@@ -15,5 +13,4 @@ public interface UserService {
 
 	void changePassword(String username, String oldPassword, String newPassword);
 
-	void updateLoginUserCache(Set<Long> userIds);
 }

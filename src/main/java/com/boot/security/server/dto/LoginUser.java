@@ -19,6 +19,10 @@ public class LoginUser extends SysUser implements UserDetails {
 
 	private List<Permission> permissions;
 	private String token;
+	/** 登陆时间戳（毫秒） */
+	private Long loginTime;
+	/** 过期时间戳 */
+	private Long expireTime;
 
 	public List<Permission> getPermissions() {
 		return permissions;
@@ -69,6 +73,22 @@ public class LoginUser extends SysUser implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return true;
+	}
+
+	public Long getLoginTime() {
+		return loginTime;
+	}
+
+	public void setLoginTime(Long loginTime) {
+		this.loginTime = loginTime;
+	}
+
+	public Long getExpireTime() {
+		return expireTime;
+	}
+
+	public void setExpireTime(Long expireTime) {
+		this.expireTime = expireTime;
 	}
 
 }
