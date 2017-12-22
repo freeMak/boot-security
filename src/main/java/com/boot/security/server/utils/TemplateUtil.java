@@ -284,7 +284,7 @@ public class TemplateUtil {
 	private static String getAddDivs(List<String> beanFieldNames) {
 		StringBuilder builder = new StringBuilder();
 		beanFieldNames.forEach(b -> {
-			if (!"id".equals(b)) {
+			if (!"id".equals(b) && !"createTime".equals(b) && !"updateTime".equals(b)) {
 				builder.append("\t\t\t<div class='form-group'>\n");
 				builder.append("\t\t\t\t<label class='col-md-2 control-label'>" + b + "</label>\n");
 				builder.append("\t\t\t\t<div class='col-md-10'>\n");
