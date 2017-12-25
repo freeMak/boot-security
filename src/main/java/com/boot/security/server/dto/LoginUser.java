@@ -47,6 +47,10 @@ public class LoginUser extends SysUser implements UserDetails {
 				.map(p -> new SimpleGrantedAuthority(p.getPermission())).collect(Collectors.toSet());
 	}
 
+	public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
+		// do nothing
+	}
+
 	// 账户是否未过期
 	@JsonIgnore
 	@Override

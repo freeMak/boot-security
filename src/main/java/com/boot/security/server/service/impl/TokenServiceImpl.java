@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,13 @@ import com.boot.security.server.dto.Token;
 import com.boot.security.server.service.SysLogService;
 import com.boot.security.server.service.TokenService;
 
+/**
+ * token存到redis的实现类
+ * 
+ * @author 小威老师
+ *
+ */
+@Primary
 @Service
 public class TokenServiceImpl implements TokenService {
 

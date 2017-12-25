@@ -542,3 +542,15 @@ CREATE TABLE `t_notice_read` (
 -- ----------------------------
 -- Records of t_notice_read
 -- ----------------------------
+-- ----------------------------
+-- Table structure for t_token
+-- ----------------------------
+DROP TABLE IF EXISTS `t_token`;
+CREATE TABLE `t_token` (
+  `id` varchar(36) NOT NULL COMMENT 'token',
+  `val` text NOT NULL COMMENT 'LoginUser的json串',
+  `expireTime` datetime NOT NULL,
+  `createTime` datetime NOT NULL,
+  `updateTime` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
