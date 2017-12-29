@@ -108,10 +108,10 @@ public class TokenServiceDbImpl implements TokenService {
 	}
 
 	@Override
-	public LoginUser getLoginUser(String token) {
-		String string = getUUIDFromJWT(token);
-		if (string != null) {
-			TokenModel model = tokenDao.getById(string);
+	public LoginUser getLoginUser(String jwtToken) {
+		String uuid = getUUIDFromJWT(jwtToken);
+		if (uuid != null) {
+			TokenModel model = tokenDao.getById(uuid);
 			return toLoginUser(model);
 		}
 
@@ -119,13 +119,13 @@ public class TokenServiceDbImpl implements TokenService {
 	}
 
 	@Override
-	public boolean deleteToken(String token) {
-		String string = getUUIDFromJWT(token);
-		if (string != null) {
-			TokenModel model = tokenDao.getById(string);
+	public boolean deleteToken(String jwtToken) {
+		String uuid = getUUIDFromJWT(jwtToken);
+		if (uuid != null) {
+			TokenModel model = tokenDao.getById(uuid);
 			LoginUser loginUser = toLoginUser(model);
 			if (loginUser != null) {
-				tokenDao.delete(token);
+				tokenDao.delete(uuid);
 				logService.save(loginUser.getId(), "退出", true, null);
 
 				return true;

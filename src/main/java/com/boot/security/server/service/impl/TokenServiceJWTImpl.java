@@ -103,9 +103,9 @@ public class TokenServiceJWTImpl implements TokenService {
 
 	@Override
 	public LoginUser getLoginUser(String jwtToken) {
-		String string = getUUIDFromJWT(jwtToken);
-		if (string != null) {
-			return redisTemplate.boundValueOps(getTokenKey(string)).get();
+		String uuid = getUUIDFromJWT(jwtToken);
+		if (uuid != null) {
+			return redisTemplate.boundValueOps(getTokenKey(uuid)).get();
 		}
 
 		return null;
@@ -113,9 +113,9 @@ public class TokenServiceJWTImpl implements TokenService {
 
 	@Override
 	public boolean deleteToken(String jwtToken) {
-		String string = getUUIDFromJWT(jwtToken);
-		if (string != null) {
-			String key = getTokenKey(string);
+		String uuid = getUUIDFromJWT(jwtToken);
+		if (uuid != null) {
+			String key = getTokenKey(uuid);
 			LoginUser loginUser = redisTemplate.opsForValue().get(key);
 			if (loginUser != null) {
 				redisTemplate.delete(key);
@@ -129,8 +129,8 @@ public class TokenServiceJWTImpl implements TokenService {
 		return false;
 	}
 
-	private String getTokenKey(String token) {
-		return "tokens:" + token;
+	private String getTokenKey(String uuid) {
+		return "tokens:" + uuid;
 	}
 
 	private Key getKeyInstance() {
