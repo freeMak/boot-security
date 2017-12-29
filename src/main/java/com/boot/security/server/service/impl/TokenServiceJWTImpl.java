@@ -1,0 +1,161 @@
+package com.boot.security.server.service.impl;
+
+import java.security.Key;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+
+import javax.crypto.spec.SecretKeySpec;
+import javax.xml.bind.DatatypeConverter;
+
+import org.apache.commons.collections4.MapUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Primary;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Service;
+
+import com.boot.security.server.dto.LoginUser;
+import com.boot.security.server.dto.Token;
+import com.boot.security.server.service.SysLogService;
+import com.boot.security.server.service.TokenService;
+
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+
+/**
+ * token存到redis的实现类<br>
+ * jwt实现的token
+ * 
+ * @author 小威老师
+ *
+ */
+@Primary
+@Service
+public class TokenServiceJWTImpl implements TokenService {
+
+	private static final Logger log = LoggerFactory.getLogger("adminLogger");
+
+	/**
+	 * token过期秒数
+	 */
+	@Value("${token.expire.seconds}")
+	private Integer expireSeconds;
+	@Autowired
+	private RedisTemplate<String, LoginUser> redisTemplate;
+	@Autowired
+	private SysLogService logService;
+	/**
+	 * 私钥
+	 */
+	@Value("${token.jwtSecret}")
+	private String jwtSecret;
+
+	private static Key KEY = null;
+	private static final String LOGIN_USER_KEY = "LOGIN_USER_KEY";
+
+	@Override
+	public Token saveToken(LoginUser loginUser) {
+		loginUser.setToken(UUID.randomUUID().toString());
+		String jwtToken = createJWTToken(loginUser);
+		cacheLoginUser(loginUser);
+		// 登陆日志
+		logService.save(loginUser.getId(), "登陆", true, null);
+
+		return new Token(jwtToken, loginUser.getLoginTime());
+	}
+
+	/**
+	 * 生成jwt
+	 * 
+	 * @param loginUser
+	 * @return
+	 */
+	public String createJWTToken(LoginUser loginUser) {
+		Map<String, Object> claims = new HashMap<>();
+		claims.put(LOGIN_USER_KEY, loginUser.getToken());// 放入一个随机字符串，通过该串可找到登陆用户
+
+		String jwtToken = Jwts.builder().setClaims(claims).signWith(SignatureAlgorithm.HS256, getKeyInstance())
+				.compact();
+
+		return jwtToken;
+	}
+
+	private void cacheLoginUser(LoginUser loginUser) {
+		loginUser.setLoginTime(System.currentTimeMillis());
+		loginUser.setExpireTime(loginUser.getLoginTime() + expireSeconds * 1000);
+		// 根据uuid将loginUser缓存
+		redisTemplate.boundValueOps(getTokenKey(loginUser.getToken())).set(loginUser, expireSeconds, TimeUnit.SECONDS);
+	}
+
+	/**
+	 * 更新缓存的用户信息
+	 */
+	@Override
+	public void refresh(LoginUser loginUser) {
+		cacheLoginUser(loginUser);
+	}
+
+	@Override
+	public LoginUser getLoginUser(String token) {
+		String string = getUUIDFromJWT(token);
+		if (string != null) {
+			return redisTemplate.boundValueOps(getTokenKey(string)).get();
+		}
+
+		return null;
+	}
+
+	@Override
+	public boolean deleteToken(String token) {
+		String string = getUUIDFromJWT(token);
+		if (string != null) {
+			String key = getTokenKey(string);
+			LoginUser loginUser = redisTemplate.opsForValue().get(key);
+			if (loginUser != null) {
+				redisTemplate.delete(key);
+				// 退出日志
+				logService.save(loginUser.getId(), "退出", true, null);
+
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private String getTokenKey(String token) {
+		return "tokens:" + token;
+	}
+
+	private Key getKeyInstance() {
+		if (KEY == null) {
+			synchronized (TokenServiceJWTImpl.class) {
+				if (KEY == null) {// 双重锁
+					byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(jwtSecret);
+					KEY = new SecretKeySpec(apiKeySecretBytes, SignatureAlgorithm.HS256.getJcaName());
+				}
+			}
+		}
+
+		return KEY;
+	}
+
+	private String getUUIDFromJWT(String jwt) {
+		Map<String, Object> jwtClaims = null;
+		try {
+			jwtClaims = Jwts.parser().setSigningKey(getKeyInstance()).parseClaimsJws(jwt).getBody();
+		} catch (ExpiredJwtException e) {
+			log.error("{}已过期", jwt);
+			return null;
+		} catch (Exception e) {
+			throw e;
+		}
+
+		return MapUtils.getString(jwtClaims, LOGIN_USER_KEY);
+	}
+}
