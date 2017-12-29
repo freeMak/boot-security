@@ -1,8 +1,17 @@
 package com.boot.security.server.service.impl;
 
+import java.security.Key;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
+import javax.crypto.spec.SecretKeySpec;
+import javax.xml.bind.DatatypeConverter;
+
+import org.apache.commons.collections4.MapUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -15,6 +24,10 @@ import com.boot.security.server.model.TokenModel;
 import com.boot.security.server.service.SysLogService;
 import com.boot.security.server.service.TokenService;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+
 /**
  * token存到数据库的实现类
  * 
@@ -24,6 +37,7 @@ import com.boot.security.server.service.TokenService;
 @Service
 public class TokenServiceDbImpl implements TokenService {
 
+	private static final Logger log = LoggerFactory.getLogger("adminLogger");
 	/**
 	 * token过期秒数
 	 */
@@ -33,17 +47,23 @@ public class TokenServiceDbImpl implements TokenService {
 	private TokenDao tokenDao;
 	@Autowired
 	private SysLogService logService;
+	/**
+	 * 私钥
+	 */
+	@Value("${token.jwtSecret}")
+	private String jwtSecret;
+
+	private static Key KEY = null;
+	private static final String LOGIN_USER_KEY = "LOGIN_USER_KEY";
 
 	@Override
 	public Token saveToken(LoginUser loginUser) {
-		String token = UUID.randomUUID().toString();
-
-		loginUser.setToken(token);
+		loginUser.setToken(UUID.randomUUID().toString());
 		loginUser.setLoginTime(System.currentTimeMillis());
 		loginUser.setExpireTime(loginUser.getLoginTime() + expireSeconds * 1000);
 
 		TokenModel model = new TokenModel();
-		model.setId(token);
+		model.setId(loginUser.getToken());
 		model.setCreateTime(new Date());
 		model.setUpdateTime(new Date());
 		model.setExpireTime(new Date(loginUser.getExpireTime()));
@@ -53,7 +73,25 @@ public class TokenServiceDbImpl implements TokenService {
 		// 登陆日志
 		logService.save(loginUser.getId(), "登陆", true, null);
 
-		return new Token(token, loginUser.getLoginTime());
+		String jwtToken = createJWTToken(loginUser);
+
+		return new Token(jwtToken, loginUser.getLoginTime());
+	}
+
+	/**
+	 * 生成jwt
+	 * 
+	 * @param loginUser
+	 * @return
+	 */
+	private String createJWTToken(LoginUser loginUser) {
+		Map<String, Object> claims = new HashMap<>();
+		claims.put(LOGIN_USER_KEY, loginUser.getToken());// 放入一个随机字符串，通过该串可找到登陆用户
+
+		String jwtToken = Jwts.builder().setClaims(claims).signWith(SignatureAlgorithm.HS256, getKeyInstance())
+				.compact();
+
+		return jwtToken;
 	}
 
 	@Override
@@ -71,19 +109,27 @@ public class TokenServiceDbImpl implements TokenService {
 
 	@Override
 	public LoginUser getLoginUser(String token) {
-		TokenModel model = tokenDao.getById(token);
-		return toLoginUser(model);
+		String string = getUUIDFromJWT(token);
+		if (string != null) {
+			TokenModel model = tokenDao.getById(string);
+			return toLoginUser(model);
+		}
+
+		return null;
 	}
 
 	@Override
 	public boolean deleteToken(String token) {
-		TokenModel model = tokenDao.getById(token);
-		LoginUser loginUser = toLoginUser(model);
-		if (loginUser != null) {
-			tokenDao.delete(token);
-			logService.save(loginUser.getId(), "退出", true, null);
+		String string = getUUIDFromJWT(token);
+		if (string != null) {
+			TokenModel model = tokenDao.getById(string);
+			LoginUser loginUser = toLoginUser(model);
+			if (loginUser != null) {
+				tokenDao.delete(token);
+				logService.save(loginUser.getId(), "退出", true, null);
 
-			return true;
+				return true;
+			}
 		}
 
 		return false;
@@ -94,6 +140,33 @@ public class TokenServiceDbImpl implements TokenService {
 			return null;
 		}
 		return JSONObject.parseObject(model.getVal(), LoginUser.class);
+	}
+
+	private Key getKeyInstance() {
+		if (KEY == null) {
+			synchronized (TokenServiceJWTImpl.class) {
+				if (KEY == null) {// 双重锁
+					byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(jwtSecret);
+					KEY = new SecretKeySpec(apiKeySecretBytes, SignatureAlgorithm.HS256.getJcaName());
+				}
+			}
+		}
+
+		return KEY;
+	}
+
+	private String getUUIDFromJWT(String jwt) {
+		Map<String, Object> jwtClaims = null;
+		try {
+			jwtClaims = Jwts.parser().setSigningKey(getKeyInstance()).parseClaimsJws(jwt).getBody();
+		} catch (ExpiredJwtException e) {
+			log.error("{}已过期", jwt);
+			return null;
+		} catch (Exception e) {
+			throw e;
+		}
+
+		return MapUtils.getString(jwtClaims, LOGIN_USER_KEY);
 	}
 
 }

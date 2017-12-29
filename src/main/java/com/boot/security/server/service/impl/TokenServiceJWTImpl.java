@@ -61,10 +61,11 @@ public class TokenServiceJWTImpl implements TokenService {
 	@Override
 	public Token saveToken(LoginUser loginUser) {
 		loginUser.setToken(UUID.randomUUID().toString());
-		String jwtToken = createJWTToken(loginUser);
 		cacheLoginUser(loginUser);
 		// 登陆日志
 		logService.save(loginUser.getId(), "登陆", true, null);
+
+		String jwtToken = createJWTToken(loginUser);
 
 		return new Token(jwtToken, loginUser.getLoginTime());
 	}
@@ -75,7 +76,7 @@ public class TokenServiceJWTImpl implements TokenService {
 	 * @param loginUser
 	 * @return
 	 */
-	public String createJWTToken(LoginUser loginUser) {
+	private String createJWTToken(LoginUser loginUser) {
 		Map<String, Object> claims = new HashMap<>();
 		claims.put(LOGIN_USER_KEY, loginUser.getToken());// 放入一个随机字符串，通过该串可找到登陆用户
 
@@ -101,8 +102,8 @@ public class TokenServiceJWTImpl implements TokenService {
 	}
 
 	@Override
-	public LoginUser getLoginUser(String token) {
-		String string = getUUIDFromJWT(token);
+	public LoginUser getLoginUser(String jwtToken) {
+		String string = getUUIDFromJWT(jwtToken);
 		if (string != null) {
 			return redisTemplate.boundValueOps(getTokenKey(string)).get();
 		}
@@ -111,8 +112,8 @@ public class TokenServiceJWTImpl implements TokenService {
 	}
 
 	@Override
-	public boolean deleteToken(String token) {
-		String string = getUUIDFromJWT(token);
+	public boolean deleteToken(String jwtToken) {
+		String string = getUUIDFromJWT(jwtToken);
 		if (string != null) {
 			String key = getTokenKey(string);
 			LoginUser loginUser = redisTemplate.opsForValue().get(key);
@@ -145,12 +146,12 @@ public class TokenServiceJWTImpl implements TokenService {
 		return KEY;
 	}
 
-	private String getUUIDFromJWT(String jwt) {
+	private String getUUIDFromJWT(String jwtToken) {
 		Map<String, Object> jwtClaims = null;
 		try {
-			jwtClaims = Jwts.parser().setSigningKey(getKeyInstance()).parseClaimsJws(jwt).getBody();
+			jwtClaims = Jwts.parser().setSigningKey(getKeyInstance()).parseClaimsJws(jwtToken).getBody();
 		} catch (ExpiredJwtException e) {
-			log.error("{}已过期", jwt);
+			log.error("{}已过期", jwtToken);
 			return null;
 		} catch (Exception e) {
 			throw e;
