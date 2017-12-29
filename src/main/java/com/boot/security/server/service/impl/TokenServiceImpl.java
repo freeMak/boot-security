@@ -20,6 +20,7 @@ import com.boot.security.server.service.TokenService;
  * @author 小威老师
  *
  */
+@Deprecated
 @Service
 public class TokenServiceImpl implements TokenService {
 
