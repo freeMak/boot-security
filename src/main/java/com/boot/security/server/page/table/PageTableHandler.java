@@ -14,11 +14,17 @@ public class PageTableHandler {
 
 	private CountHandler countHandler;
 	private ListHandler listHandler;
+	private OrderHandler orderHandler;
 
 	public PageTableHandler(CountHandler countHandler, ListHandler listHandler) {
 		super();
 		this.countHandler = countHandler;
 		this.listHandler = listHandler;
+	}
+
+	public PageTableHandler(CountHandler countHandler, ListHandler listHandler, OrderHandler orderHandler) {
+		this(countHandler, listHandler);
+		this.orderHandler = orderHandler;
 	}
 
 	public PageTableResponse handle(PageTableRequest dtRequest) {
@@ -27,6 +33,9 @@ public class PageTableHandler {
 
 		count = this.countHandler.count(dtRequest);
 		if (count > 0) {
+			if (orderHandler != null) {
+				dtRequest = orderHandler.order(dtRequest);
+			}
 			list = this.listHandler.list(dtRequest);
 		}
 
@@ -43,5 +52,9 @@ public class PageTableHandler {
 
 	public interface CountHandler {
 		int count(PageTableRequest request);
+	}
+
+	public interface OrderHandler {
+		PageTableRequest order(PageTableRequest request);
 	}
 }
