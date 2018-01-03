@@ -10,9 +10,9 @@ spring:
     maxWait: 60000
     timeBetweenEvictionRunsMillis: 60000
     minEvictableIdleTimeMillis: 300000
-    validationQuery: SELECT 1 
+    validationQuery: SELECT 1
     testWhileIdle: true
-    testOnBorrow: false
+    testOnBorrow: true
     testOnReturn: false
     poolPreparedStatements: true
     maxPoolPreparedStatementPerConnectionSize: 20
