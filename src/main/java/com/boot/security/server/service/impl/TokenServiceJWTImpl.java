@@ -10,6 +10,7 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -147,16 +148,20 @@ public class TokenServiceJWTImpl implements TokenService {
 	}
 
 	private String getUUIDFromJWT(String jwtToken) {
+		if ("null".equals(jwtToken) || StringUtils.isBlank(jwtToken)) {
+			return null;
+		}
+
 		Map<String, Object> jwtClaims = null;
 		try {
 			jwtClaims = Jwts.parser().setSigningKey(getKeyInstance()).parseClaimsJws(jwtToken).getBody();
+			return MapUtils.getString(jwtClaims, LOGIN_USER_KEY);
 		} catch (ExpiredJwtException e) {
 			log.error("{}已过期", jwtToken);
-			return null;
 		} catch (Exception e) {
-			throw e;
+			log.error("{}", e);
 		}
 
-		return MapUtils.getString(jwtClaims, LOGIN_USER_KEY);
+		return null;
 	}
 }
