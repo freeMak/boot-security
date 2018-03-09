@@ -35,8 +35,8 @@ spring:
   mail:
     default-encoding: UTF-8
     host: smtp.163.com
-    username: xxx@163.com
-    password: xxx
+    username:
+    password:
     protocol: smtp
     test-connection: false
 mybatis:
