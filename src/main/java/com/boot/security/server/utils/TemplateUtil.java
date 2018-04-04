@@ -95,10 +95,10 @@ public class TemplateUtil {
 					.append("() {\n");
 			buffer.append("\t\treturn ").append(name).append(";\n");
 			buffer.append("\t}\n");
-			buffer.append("\tpublic ").append(type).append(" set")
+			buffer.append("\tpublic void set")
 					.append(StringUtils.substring(name, 0, 1).toUpperCase() + name.substring(1, name.length()))
-					.append("() {\n");
-			buffer.append("\t\treturn ").append(name).append(";\n");
+					.append("(").append(type).append(" ").append(name).append(") {\n");
+			buffer.append("\t\tthis.").append(name).append(" = ").append(name).append(";\n");
 			buffer.append("\t}\n");
 		}
 

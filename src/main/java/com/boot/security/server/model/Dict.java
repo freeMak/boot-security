@@ -11,24 +11,24 @@ public class Dict extends BaseEntity<Long> {
 		return type;
 	}
 
-	public String setType() {
-		return type;
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	public String getK() {
 		return k;
 	}
 
-	public String setK() {
-		return k;
+	public void setK(String k) {
+		this.k = k;
 	}
 
 	public String getVal() {
 		return val;
 	}
 
-	public String setVal() {
-		return val;
+	public void setVal(String val) {
+		this.val = val;
 	}
 
 }
