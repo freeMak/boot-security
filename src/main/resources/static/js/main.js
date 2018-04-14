@@ -46,7 +46,7 @@ function initMenu(){
                          
                          ca.append("<cite>"+item2.name+"</cite>");
                          
-                         var dd = $("<dd class='layui-nav-child'></dd>");
+                         var dd = $("<dd></dd>");
                          dd.append(ca);
                          
                          var dl = $("<dl class='layui-nav-child'></dl>");
