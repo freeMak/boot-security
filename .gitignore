@@ -4,4 +4,4 @@
 /.project
 /logs/
 /.idea/
-/boot-security.iml
+/*.iml
