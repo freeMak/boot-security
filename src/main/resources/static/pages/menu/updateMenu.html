@@ -89,10 +89,10 @@
 	});
 	
 	initParentMenuSelect();
+	var id = getUrlParam("id");
 	initData();
 	
 	function initData(){
-		var id = getUrlParam("id");
 		if(id != ""){
 			$.ajax({
 				type : 'get',
@@ -131,6 +131,11 @@
 	}
 	
 		function update() {
+			if($("#parentId").val() == id){
+	            layer.msg("父级菜单不能是自己");
+	            return;
+			}
+			
 			$('#form').bootstrapValidator();
 			var bootstrapValidator = $("#form").data('bootstrapValidator');
 			bootstrapValidator.validate();
