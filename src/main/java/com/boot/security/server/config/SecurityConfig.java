@@ -58,7 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 						"/v2/api-docs/**", "/swagger-resources/**", "/webjars/**", "/pages/**", "/druid/**",
 						"/statics/**")
 				.permitAll().anyRequest().authenticated();
-		http.formLogin().loginPage("/login.html").loginProcessingUrl("/login")
+		http.formLogin().loginProcessingUrl("/login")
 				.successHandler(authenticationSuccessHandler).failureHandler(authenticationFailureHandler).and()
 				.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint);
 		http.logout().logoutUrl("/logout").logoutSuccessHandler(logoutSuccessHandler);
