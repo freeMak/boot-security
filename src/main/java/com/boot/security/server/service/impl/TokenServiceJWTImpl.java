@@ -152,9 +152,8 @@ public class TokenServiceJWTImpl implements TokenService {
 			return null;
 		}
 
-		Map<String, Object> jwtClaims = null;
 		try {
-			jwtClaims = Jwts.parser().setSigningKey(getKeyInstance()).parseClaimsJws(jwtToken).getBody();
+			Map<String, Object> jwtClaims = Jwts.parser().setSigningKey(getKeyInstance()).parseClaimsJws(jwtToken).getBody();
 			return MapUtils.getString(jwtClaims, LOGIN_USER_KEY);
 		} catch (ExpiredJwtException e) {
 			log.error("{}已过期", jwtToken);

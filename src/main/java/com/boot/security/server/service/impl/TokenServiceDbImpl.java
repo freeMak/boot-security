@@ -145,7 +145,7 @@ public class TokenServiceDbImpl implements TokenService {
 
 	private Key getKeyInstance() {
 		if (KEY == null) {
-			synchronized (TokenServiceJWTImpl.class) {
+			synchronized (TokenServiceDbImpl.class) {
 				if (KEY == null) {// 双重锁
 					byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(jwtSecret);
 					KEY = new SecretKeySpec(apiKeySecretBytes, SignatureAlgorithm.HS256.getJcaName());
