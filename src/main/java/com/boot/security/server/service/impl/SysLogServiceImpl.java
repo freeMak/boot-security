@@ -24,14 +24,21 @@ public class SysLogServiceImpl implements SysLogService {
 	@Autowired
 	private SysLogsDao sysLogsDao;
 
+	/**
+	 * 2018.05.12将该方法改为异步,用户由调用者设置
+	 *
+	 * @param sysLogs
+	 * @see com.boot.security.server.advice.LogAdvice
+	 */
+	@Async
 	@Override
 	public void save(SysLogs sysLogs) {
-		SysUser user = UserUtil.getLoginUser();
-		if (user == null || user.getId() == null) {
+//		SysUser user = UserUtil.getLoginUser();
+		if (sysLogs == null || sysLogs.getUser() == null || sysLogs.getUser().getId() == null) {
 			return;
 		}
 
-		sysLogs.setUser(user);
+//		sysLogs.setUser(user);
 		sysLogsDao.save(sysLogs);
 	}
 

@@ -1,5 +1,6 @@
 package com.boot.security.server.advice;
 
+import com.boot.security.server.utils.UserUtil;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -16,7 +17,7 @@ import io.swagger.annotations.ApiOperation;
 
 /**
  * 统一日志处理
- * 
+ *
  * @author 小威老师
  *
  *         2017年8月19日
@@ -31,6 +32,7 @@ public class LogAdvice {
 	@Around(value = "@annotation(com.boot.security.server.annotation.LogAnnotation)")
 	public Object logSave(ProceedingJoinPoint joinPoint) throws Throwable {
 		SysLogs sysLogs = new SysLogs();
+        sysLogs.setUser(UserUtil.getLoginUser()); // 设置当前登录用户
 		MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
 
 		String module = null;
@@ -50,17 +52,18 @@ public class LogAdvice {
 
 		try {
 			Object object = joinPoint.proceed();
-
 			sysLogs.setFlag(true);
-			logService.save(sysLogs);
 
 			return object;
 		} catch (Exception e) {
 			sysLogs.setFlag(false);
 			sysLogs.setRemark(e.getMessage());
-			logService.save(sysLogs);
 			throw e;
-		}
+        } finally {
+            if (sysLogs.getUser() != null) {
+                logService.save(sysLogs);
+            }
+        }
 
 	}
 }
