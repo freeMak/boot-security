@@ -33,7 +33,6 @@ spring:
   redis:
     host: localhost
     port: 6379
-    password:
   mail:
     default-encoding: UTF-8
     host: smtp.163.com

@@ -14,7 +14,6 @@ import com.boot.security.server.dao.SysLogsDao;
 import com.boot.security.server.model.SysLogs;
 import com.boot.security.server.model.SysUser;
 import com.boot.security.server.service.SysLogService;
-import com.boot.security.server.utils.UserUtil;
 
 @Service
 public class SysLogServiceImpl implements SysLogService {
