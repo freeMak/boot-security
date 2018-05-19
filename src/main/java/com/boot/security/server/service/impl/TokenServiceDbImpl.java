@@ -140,7 +140,13 @@ public class TokenServiceDbImpl implements TokenService {
 		if (model == null) {
 			return null;
 		}
-		return JSONObject.parseObject(model.getVal(), LoginUser.class);
+
+		// 校验是否已过期
+		if (model.getExpireTime().getTime() > System.currentTimeMillis()) {
+			return JSONObject.parseObject(model.getVal(), LoginUser.class);
+		}
+
+		return null;
 	}
 
 	private Key getKeyInstance() {
