@@ -32,6 +32,13 @@ spring:
   redis:
     host: localhost
     port: 6379
+    timeout: 3000
+    lettuce:
+      pool:
+        min-idle: 0
+        max-idle: 8
+        max-active: 8
+        max-wait: -1
   mail:
     default-encoding: UTF-8
     host: smtp.163.com
