@@ -20,7 +20,6 @@
 		<poi.version>3.17</poi.version>
 		<jwt.version>0.9.0</jwt.version>
 		<mybatis.version>1.3.2</mybatis.version>
-		<commons-pool2.version>2.5.0</commons-pool2.version>
 	</properties>
 
 	<dependencies>
@@ -138,7 +137,6 @@
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-pool2</artifactId>
-			<version>${commons-pool2.version}</version>
 		</dependency>
 	</dependencies>
 
