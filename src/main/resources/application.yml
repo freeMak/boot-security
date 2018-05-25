@@ -35,7 +35,7 @@ spring:
   redis:
     host: localhost
     port: 6379
-    timeout: 5000
+    timeout: 10000
     lettuce:
       pool:
         min-idle: 0
