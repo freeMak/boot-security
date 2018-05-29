@@ -3,7 +3,7 @@ function showDictSelect(id, type, all) {
 	var select = $("#" + id);
 	select.empty();
 
-	if (all != undefined || all) {
+	if (all != undefined && all) {
 		select.append("<option value=''>全部</option>");
 	}
 
