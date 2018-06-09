@@ -30,35 +30,42 @@ function initMenu(){
 	            	 li.addClass("layui-nav-itemed");
 	             }
 	             li.append(a);
+                 menu.append(li);
 	             
-	             //二级菜单
-	             var child2 = item.child;
-	             if(child2 != null && child2.length > 0){
-	            	 $.each(child2, function(j,item2){
-	            		 var ca = $("<a href='javascript:;'></a>");
-                         ca.attr("data-url", item2.href);
-                         ca.attr("lay-id", item2.id);
-                         
-                         var css2 = item2.css;
-                         if(css2!=null && css2!=""){
-                        	 ca.append("<i aria-hidden='true' class='fa " + css2 +"'></i>");
-                         }
-                         
-                         ca.append("<cite>"+item2.name+"</cite>");
-                         
-                         var dd = $("<dd></dd>");
-                         dd.append(ca);
-                         
-                         var dl = $("<dl class='layui-nav-child'></dl>");
-                         dl.append(dd);
-                         
-                         li.append(dl);
-	            	 });
-	            }
-	            menu.append(li);
+	             //多级菜单
+	             setChild(li, item.child)
+
 	        });
 	     }
 	 });
+}
+
+function setChild(parentElement, child){
+    if(child != null && child.length > 0){
+        $.each(child, function(j,item2){
+            var ca = $("<a href='javascript:;'></a>");
+            ca.attr("data-url", item2.href);
+            ca.attr("lay-id", item2.id);
+
+            var css2 = item2.css;
+            if(css2!=null && css2!=""){
+                ca.append("<i aria-hidden='true' class='fa " + css2 +"'></i>");
+            }
+
+            ca.append("<cite>"+item2.name+"</cite>");
+
+            var dd = $("<dd></dd>");
+            dd.append(ca);
+
+            var dl = $("<dl class='layui-nav-child'></dl>");
+            dl.append(dd);
+
+            parentElement.append(dl);
+
+            // 递归
+            setChild(dd, item2.child);
+        });
+    }
 }
 
 // 登陆用户头像昵称
