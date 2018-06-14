@@ -68,6 +68,10 @@
 		<appender-ref ref="sqlLog" />
 	</logger>
 
+	<logger name="org.springframework.scheduling.quartz" level="error" additivity="true">
+		<appender-ref ref="adminLog" />
+	</logger>
+
 	<root level="${rootlevel}">
 		<appender-ref ref="STDOUT" />
 		<appender-ref ref="errorLog" />
