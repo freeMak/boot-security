@@ -167,7 +167,7 @@ public class PermissionController {
 	}
 
 	@GetMapping(params = "roleId")
-	@ApiOperation(value = "根据角色id删除权限")
+	@ApiOperation(value = "根据角色id获取权限")
 	@PreAuthorize("hasAnyAuthority('sys:menu:query','sys:role:query')")
 	public List<Permission> listByRoleId(Long roleId) {
 		return permissionDao.listByRoleId(roleId);
