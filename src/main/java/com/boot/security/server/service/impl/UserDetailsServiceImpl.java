@@ -20,10 +20,11 @@ import com.boot.security.server.model.SysUser.Status;
 import com.boot.security.server.service.UserService;
 
 /**
- * spring security登陆处理
- * 
- * @author 小威老师
+ * spring security登陆处理<br>
+ * <p>
+ * 密码校验请看文档（02 框架及配置），第三章第4节
  *
+ * @author 小威老师
  */
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
