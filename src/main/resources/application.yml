@@ -49,8 +49,8 @@ spring:
     password:
     protocol: smtp
     test-connection: false
-    properties:
-      mail.smtp.auth: true
+#    properties:
+#      mail.smtp.auth: true
 mybatis:
   type-aliases-package: com.boot.security.server.model
   mapper-locations: classpath:/mybatis-mappers/*
