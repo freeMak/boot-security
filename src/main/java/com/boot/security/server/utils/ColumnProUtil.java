@@ -32,7 +32,7 @@ public class ColumnProUtil {
 		if (resultMap != null) {
 			List<ResultMapping> list = resultMap.getResultMappings();
 
-			list.parallelStream().forEach(rm -> {
+			list.forEach(rm -> {
 				String column = rm.getColumn();
 				String pro = rm.getProperty();
 				if (StringUtils.isNoneBlank(column) && StringUtils.isNotBlank(pro)) {

@@ -142,7 +142,7 @@ public class JobController {
 		Method[] methods = clazz.getDeclaredMethods();
 
 		Set<String> names = new HashSet<>();
-		Arrays.asList(methods).parallelStream().forEach(m -> {
+		Arrays.asList(methods).forEach(m -> {
 			int b = m.getModifiers();// public 1 static 8 final 16
 			if (b == 1 || b == 9 || b == 17 || b == 25) {
 				Class<?>[] classes = m.getParameterTypes();

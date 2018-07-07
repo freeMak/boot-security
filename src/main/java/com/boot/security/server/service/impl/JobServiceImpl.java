@@ -92,7 +92,7 @@ public class JobServiceImpl implements JobService {
 		Method[] methods = clazz.getDeclaredMethods();
 
 		Set<String> names = new HashSet<>();
-		Arrays.asList(methods).parallelStream().forEach(m -> {
+		Arrays.asList(methods).forEach(m -> {
 			Class<?>[] classes = m.getParameterTypes();
 			if (classes.length == 0) {
 				names.add(m.getName());
