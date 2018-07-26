@@ -1,28 +1,5 @@
 package com.boot.security.server.controller;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.quartz.CronExpression;
-import org.quartz.SchedulerException;
-import org.springframework.aop.support.AopUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.boot.security.server.annotation.LogAnnotation;
 import com.boot.security.server.dao.JobDao;
 import com.boot.security.server.model.JobModel;
@@ -32,9 +9,20 @@ import com.boot.security.server.page.table.PageTableHandler.ListHandler;
 import com.boot.security.server.page.table.PageTableRequest;
 import com.boot.security.server.page.table.PageTableResponse;
 import com.boot.security.server.service.JobService;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.quartz.CronExpression;
+import org.quartz.SchedulerException;
+import org.springframework.aop.support.AopUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.*;
+
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.*;
 
 @Api(tags = "定时任务")
 @RestController
@@ -124,13 +112,18 @@ public class JobController {
 			}
 
 			Class<?> clazz = getClass(str);
-			if (clazz.isAssignableFrom(Controller.class) || clazz.isAnnotationPresent(RestController.class)) {
-				continue;
+//			if (clazz.isAssignableFrom(Controller.class) || clazz.isAnnotationPresent(RestController.class)) {
+//				continue;
+//			}
+//
+//			list.add(str);
+			// 2018.07.26修改 上面注释的add添加了太多不认识的bean，改为下面的判断我们只添加service，bean少了不少
+			if (clazz.isAnnotationPresent(Service.class) && str.toLowerCase().contains("service")) {
+				list.add(str);
 			}
-
-			list.add(str);
 		}
-		list.sort((l1, l2) -> l1.compareTo(l2));
+//		list.sort((l1, l2) -> l1.compareTo(l2));
+		Collections.sort(list);// 2018.07.26修改排序
 
 		return list;
 	}
@@ -144,7 +137,8 @@ public class JobController {
 		Set<String> names = new HashSet<>();
 		Arrays.asList(methods).forEach(m -> {
 			int b = m.getModifiers();// public 1 static 8 final 16
-			if (b == 1 || b == 9 || b == 17 || b == 25) {
+//			if (b == 1 || b == 9 || b == 17 || b == 25) {
+			if (Modifier.isPublic(b)) { // 2018.07.26修改public方法的判断
 				Class<?>[] classes = m.getParameterTypes();
 				if (classes.length == 0) {
 					names.add(m.getName());
