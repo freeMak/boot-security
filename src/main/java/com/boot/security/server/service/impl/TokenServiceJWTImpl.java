@@ -32,7 +32,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
  * token存到redis的实现类<br>
  * jwt实现的token
  * 
- * @author 小威老师
+ * @author 小威老师 xiaoweijiagou@163.com
  *
  */
 @Primary

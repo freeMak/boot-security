@@ -19,7 +19,7 @@ import com.google.common.collect.Maps;
 /**
  * 分页、查询参数解析
  * 
- * @author 小威老师
+ * @author 小威老师 xiaoweijiagou@163.com
  *
  */
 public class PageTableArgumentResolver implements HandlerMethodArgumentResolver {

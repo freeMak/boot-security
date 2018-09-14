@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 /**
  * 日志注解
  * 
- * @author 小威老师
+ * @author 小威老师 xiaoweijiagou@163.com
  *
  *         2017年8月19日
  */

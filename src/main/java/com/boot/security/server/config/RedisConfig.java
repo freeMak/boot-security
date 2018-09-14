@@ -13,7 +13,7 @@ import org.springframework.data.redis.serializer.GenericToStringSerializer;
  * 集群下启动session共享，需打开@EnableRedisHttpSession<br>
  * 单机下不需要
  * 
- * @author 小威老师
+ * @author 小威老师 xiaoweijiagou@163.com
  *
  *         2017年8月10日
  */

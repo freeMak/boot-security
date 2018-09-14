@@ -32,7 +32,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 /**
  * token存到数据库的实现类
  * 
- * @author 小威老师
+ * @author 小威老师 xiaoweijiagou@163.com
  *
  */
 @Service
